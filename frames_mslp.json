@@ -1,10 +1,5 @@
 [
   {
-    "time": "Tue 08 Sep 2026 23:00 UTC",
-    "mslp": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/composites/dashboard_mslp_202609082300.webp",
-    "mslp_wide": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/composites/dashboard_mslp_wide_202609082300.webp"
-  },
-  {
     "time": "Wed 09 Sep 2026 00:00 UTC",
     "mslp": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/composites/dashboard_mslp_202609090000.webp",
     "mslp_wide": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/composites/dashboard_mslp_wide_202609090000.webp"
@@ -118,5 +113,10 @@
     "time": "Wed 09 Sep 2026 22:00 UTC",
     "mslp": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/composites/dashboard_mslp_202609092200.webp",
     "mslp_wide": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/composites/dashboard_mslp_wide_202609092200.webp"
+  },
+  {
+    "time": "Wed 09 Sep 2026 23:00 UTC",
+    "mslp": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/composites/dashboard_mslp_202609092300.webp",
+    "mslp_wide": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/composites/dashboard_mslp_wide_202609092300.webp"
   }
 ]
