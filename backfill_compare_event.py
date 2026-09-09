@@ -37,6 +37,10 @@ Modes
   --mode meta   --event <id>                 Assemble the per-run fragments and
                 the copied radar snapshots into the single meta.json the page
                 loads.
+  --mode purge  --event <id> [--force]       Bin an expired event: delete its
+                whole R2 prefix, its page directory and its menu card. Refuses
+                to act before the event's `expires` date unless --force is
+                given. Run daily by the Expire Compare Event workflow.
 
 Each mode is idempotent — already-present objects are skipped rather than
 rewritten, so a re-run after a partial failure costs Class B operations rather
@@ -92,6 +96,14 @@ EVENTS = {
         # range, early enough that it is still a forecast rather than an
         # analysis. Every other run stays one dropdown click away.
         "default_run": "20260903T1200Z",
+        # This case study is deliberately temporary. On or after this date the
+        # expiry workflow purges the event's R2 prefix and deletes its page, so
+        # a one-off review does not sit on the bucket forever. Push the date out
+        # to keep it longer; delete the key to make the event permanent.
+        "expires": "2026-09-23",
+        # Local artefacts removed alongside the R2 data when the event expires.
+        "page_dir":  "compare-early-september",
+        "menu_href": "/compare-early-september",
     },
 }
 
@@ -511,6 +523,82 @@ def mode_radar(r2, event_id, event):
               "expired or were never written (radar outage).")
 
 
+# ── Expiry / purge ────────────────────────────────────────────────────────────
+def event_expired(event, today=None):
+    """True once the event's `expires` date has arrived. No date => never expires."""
+    exp = event.get("expires")
+    if not exp:
+        return False
+    today = today or datetime.utcnow().date()
+    return today >= datetime.strptime(exp, "%Y-%m-%d").date()
+
+
+def _remove_menu_card(menu_path, href):
+    """Strip the event's card from menu.html. Returns True if anything changed."""
+    if not os.path.exists(menu_path):
+        return False
+    src = open(menu_path).read()
+    start_tag = f'<a href="{href}" class="card">'
+    i = src.find(start_tag)
+    if i < 0:
+        return False
+    end = src.find("</a>", i)
+    if end < 0:
+        return False
+    end += len("</a>")
+    # Take the card's leading indentation and its trailing newline with it, so
+    # removing a card leaves no blank gap behind in the grid.
+    line_start = src.rfind("\n", 0, i) + 1
+    while end < len(src) and src[end] in "\r\n":
+        end += 1
+    open(menu_path, "w").write(src[:line_start] + src[end:])
+    return True
+
+
+def mode_purge(r2, event_id, event, force=False):
+    """Delete an expired event: its whole R2 prefix, its page, its menu card.
+
+    Deliberately refuses to run before the expiry date unless --force is given,
+    so a mis-scheduled workflow cannot bin a live case study early. Deletes are
+    free on R2 (DeleteObject is not a Class A operation); only the LIST pages
+    cost anything.
+    """
+    if not event_expired(event) and not force:
+        print(f"Not expired (expires {event.get('expires', 'never')}) — nothing to do.")
+        return
+
+    prefix = event_key(event_id) + "/"
+    # Guard: this function only ever deletes inside the event tree. Anything
+    # else means a malformed event id, and we stop rather than issue deletes.
+    if not prefix.startswith(EVENT_ROOT + "/") or prefix.count("/") < 2:
+        print(f"Refusing to purge unsafe prefix {prefix!r}")
+        sys.exit(1)
+
+    print(f"Purging R2 prefix {prefix}")
+    deleted = 0
+    paginator = r2.get_paginator("list_objects_v2")
+    for page in paginator.paginate(Bucket=fu.R2_BUCKET, Prefix=prefix):
+        keys = [{"Key": o["Key"]} for o in page.get("Contents", [])]
+        for i in range(0, len(keys), 1000):
+            batch = keys[i:i + 1000]
+            r2.delete_objects(Bucket=fu.R2_BUCKET, Delete={"Objects": batch})
+            deleted += len(batch)
+            print(f"  deleted {deleted} objects...", flush=True)
+    print(f"R2 purge complete: {deleted} object(s) removed under {prefix}")
+
+    page_dir = event.get("page_dir")
+    if page_dir and os.path.isdir(page_dir):
+        import shutil
+        shutil.rmtree(page_dir)
+        print(f"Removed page directory {page_dir}/")
+
+    href = event.get("menu_href")
+    if href and _remove_menu_card("menu.html", href):
+        print(f"Removed menu card for {href}")
+
+    print(f"\nEvent '{event_id}' purged. Commit the working tree to finish.")
+
+
 # ── Meta assembly ─────────────────────────────────────────────────────────────
 def frame_label(ts):
     return datetime.strptime(ts, "%Y%m%d%H%M").strftime("%a %d %b %Y %H:%M UTC")
@@ -606,7 +694,7 @@ def mode_meta(r2, event_id, event):
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--mode", required=True, choices=("ukv", "radar", "meta"))
+    ap.add_argument("--mode", required=True, choices=("ukv", "radar", "meta", "purge"))
     ap.add_argument("--event", default="early_sep_2026")
     ap.add_argument("--runs", default="",
                     help="Comma-separated run timestamps to process (ukv mode only). "
@@ -615,6 +703,9 @@ def main():
                     help="1-based shard index for this job (ukv mode only).")
     ap.add_argument("--shards", type=int, default=1,
                     help="Total number of shards the event's runs are split across.")
+    ap.add_argument("--force", action="store_true",
+                    help="purge mode only: bin the event even if its expiry date "
+                         "has not arrived yet.")
     args = ap.parse_args()
 
     if args.event not in EVENTS:
@@ -634,6 +725,8 @@ def main():
         mode_ukv(r2, args.event, event, args.runs, args.shard, args.shards)
     elif args.mode == "radar":
         mode_radar(r2, args.event, event)
+    elif args.mode == "purge":
+        mode_purge(r2, args.event, event, args.force)
     else:
         mode_meta(r2, args.event, event)
 
