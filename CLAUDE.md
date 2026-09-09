@@ -300,6 +300,20 @@ Three things to keep in mind when changing any of them:
 - Cost, for reference when adding an event: ~1,000 forecast steps for a 17-run
   event is roughly 31k R2 Class A ops, plus ~5.8k for the radar copy — about 4%
   of the monthly free tier (see the R2 budget section above), one-off.
+- **Events can expire, and `early_sep_2026` does — on 2026-09-23.** A case study
+  is a one-off review, not a permanent product, so an event may carry an
+  `expires` date (plus `page_dir` / `menu_href`). The **Expire Compare Event**
+  workflow runs daily and calls `--mode purge`, which deletes the whole
+  `compare_events/{event_id}/` prefix from R2, removes the page directory and
+  its menu card, and commits. The date gate lives in `mode_purge()`, not in the
+  workflow, so the daily schedule is a harmless no-op until the date arrives and
+  the decision stays unit-testable. Two safety properties worth keeping if this
+  is ever edited: it refuses to delete before the expiry date unless `--force`
+  is passed, and it refuses any prefix that is not inside `compare_events/`, so
+  a malformed event id cannot reach the live `ukv/` or `accum_hist/` trees.
+  **To keep this event for longer, push the `expires` date out; to make it
+  permanent, delete the key.** Deletes are free on R2, so expiry costs nothing
+  beyond the LIST pages.
 - `compare-early-september/index.html` is a fork of `compare.html`, not a
   refactor of it — the live page keeps working unchanged. It differs only in:
   loading one static `meta.json` instead of the two live manifests (and so no
