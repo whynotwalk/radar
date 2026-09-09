@@ -153,7 +153,12 @@ body {
 .cbar-labels { position: relative; height: 13px; margin-top: 2px; font-size: 10px; color: #5f6368; font-weight: 500; }
 .cbar-label  { position: absolute; transform: translateX(-50%); white-space: nowrap; }
 
-.region-boundary { filter: drop-shadow(0 0 2.5px rgba(255,255,255,0.75)); }
+/* Copied from floodforecast's templates/radar.html, which pairs this halo with
+   the same under-the-imagery pane order used above. Stronger than the 1.5px /
+   0.7 those pages use when boundaries sit on top: underneath the rain grid,
+   both the line and its halo get dimmed by the imagery over them, so they need
+   the extra push to still read as a background reference. */
+.region-boundary { filter: drop-shadow(0px 0px 2px rgba(255,255,255,0.9)); }
 .leaflet-image-layer { image-rendering: pixelated; }
 
 .poly-tooltip {
