@@ -631,9 +631,15 @@ var radarMap = L.map('radarMap', { zoomControl: false }).setView(INIT_CENTER, IN
 var ukvMap   = L.map('ukvMap',   { zoomControl: false }).setView(INIT_CENTER, INIT_ZOOM);
 var biasMap  = L.map('biasMap',  { zoomControl: false }).setView(INIT_CENTER, INIT_ZOOM);
 
-// Dedicated pane for image overlays sits below the GeoJSON overlay pane
+// Pane order, matching floodforecast's templates/radar.html: boundary outlines
+// sit just *below* the rainfall imagery, so the grid reads as the top layer and
+// county/catchment lines show through it rather than being drawn over the top
+// of the rain. (Leaflet's default overlayPane is 400, which is where these
+// layers used to land — above imgPane, i.e. the wrong way round.) Gauge markers
+// stay on overlayPane above both, since their values have to stay readable.
 [radarMap, ukvMap, biasMap].forEach(function(m) {
   m.createPane('imgPane').style.zIndex = 350;
+  m.createPane('boundariesPane').style.zIndex = 340;
 });
 
 // Zoom control lives on whichever pane is leftmost, so the buttons sit at the
@@ -811,6 +817,7 @@ var layers = { radar: {}, ukv: {}, bias: {} };
 function createBoundaryLayer(data, type, mid) {
   var nameKey = LAYER_NAME_KEY[type];
   return L.geoJSON(data, {
+    pane: 'boundariesPane',
     style: BOUNDARY_STYLES[type],
     onEachFeature: function(feature, lyr) {
       lyr.on('click', function(e) { showPolyPopup(feature.properties[nameKey], e.latlng, MAPS[mid]); });
