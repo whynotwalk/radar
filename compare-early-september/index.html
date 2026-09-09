@@ -1270,6 +1270,19 @@ function findMatchedUKVStep(run, radarDt) {
 // radar frame and disagree with every other timestamp in the archive. Both
 // display paths go through one helper so the slider and the run selector can
 // never drift apart.
+// The run stamp in the dropdown is formatted here from run_ts rather than read
+// from the manifest's run_label. run_ts ("20260903T1200Z") is unambiguous;
+// run_label is presentation, and a manifest written by an older revision of
+// backfill_compare_event.py carries it in UK local time. Deriving it on the
+// page means the dropdown reads GMT to match the timeline no matter which
+// revision wrote the manifest — and a labelling fix ships with the page
+// instead of needing the backfill re-run.
+function formatRunTsGMT(runTs) {
+  var m = /^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})Z$/.exec(runTs || '');
+  if (!m) return '';
+  return +m[3] + ' ' + _MONTHS[+m[2] - 1] + ' ' + m[1] + ' ' + m[4] + ':' + m[5] + ' GMT';
+}
+
 function _writePlayerTime(dtUtc) {
   document.getElementById('playerDateLine').textContent =
     _DAYS[dtUtc.getUTCDay()] + ' ' + dtUtc.getUTCDate() + ' ' +
@@ -1570,7 +1583,7 @@ function buildRunSelect() {
   if (!ukvMeta || !ukvMeta.runs || !ukvMeta.runs.length) { sel.innerHTML = '<option>No data</option>'; return; }
   ukvMeta.runs.forEach(function(run, i) {
     var opt = document.createElement('option'); opt.value = i;
-    opt.textContent = run.run_label || run.run_ts;
+    opt.textContent = formatRunTsGMT(run.run_ts) || run.run_label || run.run_ts;
     sel.appendChild(opt);
   });
   sel.value = currentRunIdx;

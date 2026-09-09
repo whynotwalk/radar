@@ -321,6 +321,22 @@ Three things to keep in mind when changing any of them:
   print an event inside BST an hour ahead of every raw timestamp beside it. If
   a future event page shows a run dropdown an hour out from its slider, this is
   why: something has been routed back through the live label helpers.
+- **The page formats its own run stamp; it does not trust `run_label`.**
+  `formatRunTsGMT()` in the event page builds the dropdown label from `run_ts`,
+  which is unambiguous. `run_label` is presentation, and a manifest written
+  before the GMT change carries it in UK local time — deriving it client-side
+  means a labelling fix ships with the page on the next Pages deploy rather than
+  needing the backfill re-run at all. Do the same for any future display string
+  that can be derived from a timestamp.
+- **Labels are also derived at manifest assembly, not trusted from the fragments.**
+  `normalise_labels()` re-derives `run_label` and every `valid_label` from the
+  run timestamp and step offset each time `--mode meta` runs. This is what makes
+  a labelling mistake cheap to fix: the first real backfill of
+  `early_sep_2026` ran a minute before the GMT change landed and wrote BST
+  labels, and re-running `--mode meta` alone corrected the whole manifest in ten
+  seconds instead of re-rendering ~1,000 steps for the sake of some strings.
+  Keep any future display-string change on the assembly side for the same
+  reason — imagery is expensive, text is not.
 
 ## FGS tracker (`fetch_fgs.py` / `fgscomparison/index.html`)
 
