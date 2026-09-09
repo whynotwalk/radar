@@ -83,6 +83,22 @@ PREFIXES = [
         "retention": "pruned with the UKV run cycle",
     },
     {
+        "prefix": "compare_events/",
+        "description": "Frozen archive of a past rainfall event — regenerated UKV runs plus the radar/gauge observations they are verified against, for the pinned /compare-<event> pages",
+        "written_by": "backfill_compare_event.py",
+        "key_pattern": "compare_events/{event_id}/meta.json, compare_events/{event_id}/{ukv,ukv_poly,ukv_gauge,ukv_area_ts,accum_hist,accum_poly,gauge_bias}/...",
+        "timestamp_format": "YYYYMMDDTHHMMZ (UKV runs), YYYYMMDDHHMM (radar snapshots)",
+        "latest_pointer": "compare_events/{event_id}/meta.json",
+        "retention": "permanent — deliberately outside every cleanup job",
+        "notes": (
+            "Mirrors the live ukv*/ and accum*/ key layouts one level down so the "
+            "event pages can reuse /compare's loading code. Exists because those live "
+            "prefixes are pruned at 72h and 14 days respectively, which would otherwise "
+            "make any event unreviewable within a week. Nothing writes here on a "
+            "schedule; it is populated by the Backfill Compare Event workflow."
+        ),
+    },
+    {
         "prefix": "ukv_masks/",
         "description": "Static per-layer grid-cell mask arrays used to aggregate UKV cells into admin areas",
         "written_by": "fetch_ukv.py",
