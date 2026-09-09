@@ -332,6 +332,14 @@ Three things to keep in mind when changing any of them:
   and Areas view removes the imagery entirely, so the choropleth is unaffected.
   Gauge markers stay on `overlayPane` above both — their values have to stay
   readable. `/compare` still has the old ordering.
+- The pane order is only half of it: `.region-boundary`'s white drop-shadow halo
+  is re-tuned to `radar.html`'s `2px / 0.9` as well. floodforecast's own comment
+  explains why the two go together — under the imagery, the line *and* its halo
+  are dimmed by what is drawn over them, so the pages that put boundaries on top
+  use a lighter `1.5px / 0.7`. Moving the pane without re-tuning the halo leaves
+  the outlines washed out. Note floodforecast's `templates/compare.html` is not
+  the reference here: it carries this repo's original on-top styling. The
+  under-grid treatment lives in `templates/radar.html`.
 - **The page formats its own run stamp; it does not trust `run_label`.**
   `formatRunTsGMT()` in the event page builds the dropdown label from `run_ts`,
   which is unambiguous. `run_label` is presentation, and a manifest written
