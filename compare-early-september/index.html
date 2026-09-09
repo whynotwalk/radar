@@ -384,8 +384,8 @@ select option:disabled { color: #bbb; }
 </div>
 
 <div class="map-header-row">
-  <div class="map-header-cell" id="obsHeader">Radar obs</div>
   <div class="map-header-cell" id="ukvBadge">UKV forecast</div>
+  <div class="map-header-cell" id="obsHeader">Radar obs</div>
   <div class="map-header-cell" id="biasHeader">Bias (UKV &minus; Radar)</div>
   <div style="display:flex;align-items:center;padding:0 12px;flex-shrink:0;">
     <button class="info-icon-btn" onclick="toggleInfoModal()" title="About this data" style="color:#94a3b8;">
@@ -396,19 +396,19 @@ select option:disabled { color: #bbb; }
 <h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">UK Radar vs UKV Rainfall Comparison</h1>
 <div class="maps-row">
   <div class="map-wrap">
-    <div id="radarMap" class="map-pane"></div>
-    <div class="map-cbar" id="accumCbarRadar" data-pane-label="Radar obs">
-      <p>Accumulation (mm)</p>
-      <div class="cbar" id="accumCbarR"></div>
-      <div class="cbar-labels" id="accumCbarRLabels"></div>
-    </div>
-  </div>
-  <div class="map-wrap">
     <div id="ukvMap" class="map-pane"></div>
     <div class="map-cbar" id="accumCbarUKV" data-pane-label="UKV forecast">
       <p>Accumulation (mm)</p>
       <div class="cbar" id="accumCbarU"></div>
       <div class="cbar-labels" id="accumCbarULabels"></div>
+    </div>
+  </div>
+  <div class="map-wrap">
+    <div id="radarMap" class="map-pane"></div>
+    <div class="map-cbar" id="accumCbarRadar" data-pane-label="Radar obs">
+      <p>Accumulation (mm)</p>
+      <div class="cbar" id="accumCbarR"></div>
+      <div class="cbar-labels" id="accumCbarRLabels"></div>
     </div>
   </div>
   <div class="map-wrap">
@@ -636,7 +636,11 @@ var biasMap  = L.map('biasMap',  { zoomControl: false }).setView(INIT_CENTER, IN
   m.createPane('imgPane').style.zIndex = 350;
 });
 
-L.control.zoom({ position: 'topleft' }).addTo(radarMap);
+// Zoom control lives on whichever pane is leftmost, so the buttons sit at the
+// edge of the row rather than floating in the middle of it. That is the UKV
+// pane here — the panel order is forecast, observation, bias, not /compare's
+// observation-first order.
+L.control.zoom({ position: 'topleft' }).addTo(ukvMap);
 
 var TILE_URL  = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_27ic_1_fde6c8c094980efec9791cfc';
 var TILE_OPTS = { maxZoom: 20, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>' };

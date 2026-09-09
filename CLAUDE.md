@@ -305,7 +305,11 @@ Three things to keep in mind when changing any of them:
   loading one static `meta.json` instead of the two live manifests (and so no
   polling loop), prefixing the per-frame JSON side-loads with `EVENT_BASE`,
   `../` on repo-root assets since it sits one directory down, an identity strip
-  plus a shaded event span on the timeline, and **times in GMT throughout**.
+  plus a shaded event span on the timeline, **times in GMT throughout**, and a
+  **panel order of forecast, observation, bias** (`/compare` leads with the
+  observation). The panes are addressed by id everywhere in the JS, so that
+  reorder is DOM-only — but the Leaflet zoom control has to be moved with it, or
+  it renders in the middle of the row instead of at its left edge.
 - **Event pages are GMT/UTC end to end — do not "fix" this to local time.**
   The timeline readout, the run dropdown, the per-step `valid_label`, the radar
   snapshot timestamps and the popup chart axis are all UTC stamped `GMT`. That
