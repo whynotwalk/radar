@@ -1,0 +1,72 @@
+name: Expire Compare Event
+
+# Bins a time-limited case study once its `expires` date arrives: deletes the
+# whole compare_events/{event_id}/ prefix from R2, removes the page directory
+# and its menu card, and commits.
+#
+# Runs daily and is a no-op on every day before the expiry date — the date gate
+# lives in backfill_compare_event.py's mode_purge(), not here, so the schedule
+# can fire harmlessly as often as it likes and the decision stays testable.
+
+on:
+  workflow_dispatch:
+    inputs:
+      event:
+        description: "Event id defined in backfill_compare_event.py"
+        type: string
+        default: "early_sep_2026"
+      force:
+        description: "Bin it now, without waiting for the expiry date"
+        type: boolean
+        default: false
+  schedule:
+    # 04:12 UTC daily — off the hour so it does not pile onto the :00 jobs.
+    - cron: '12 4 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  expire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install boto3 botocore xarray netCDF4 numpy Pillow pyproj
+
+      - name: Purge the event if it has expired
+        env:
+          R2_ACCOUNT_ID:        ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID:     ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET_NAME:       ${{ secrets.R2_BUCKET_NAME }}
+          R2_PUBLIC_BASE_URL:   ${{ secrets.R2_PUBLIC_BASE_URL }}
+        run: |
+          python backfill_compare_event.py \
+            --mode purge \
+            --event "${{ inputs.event || 'early_sep_2026' }}" \
+            ${{ (inputs.force && '--force') || '' }}
+
+      # Only commits when the purge actually removed something — on every
+      # pre-expiry run the tree is clean and this is a no-op.
+      - name: Commit the removal
+        run: |
+          git config --global user.name "Radar Automator"
+          git config --global user.email "radar-bot@github.com"
+          git add -A
+          git diff --cached --quiet && echo "Nothing removed — event not expired yet." || {
+            git commit -m "Expire compare event $(date -u +'%Y-%m-%d')" || exit 1
+            n=0
+            until git pull --rebase -X theirs origin main && git push origin main; do
+              n=$((n+1)); [ $n -ge 3 ] && exit 1
+              echo "Push attempt $n/3 failed, retrying in $((n*5))s..."
+              sleep $((n*5))
+            done
+          }
