@@ -321,25 +321,6 @@ Three things to keep in mind when changing any of them:
   print an event inside BST an hour ahead of every raw timestamp beside it. If
   a future event page shows a run dropdown an hour out from its slider, this is
   why: something has been routed back through the live label helpers.
-- **Boundary outlines sit below the rainfall imagery**, matching
-  floodforecast's `templates/radar.html`, which puts its boundaries on a
-  `boundariesPane` under the radar overlay. Leaflet's default `overlayPane`
-  (400) is *above* this page's `imgPane` (350), so GeoJSON boundaries land on
-  top of the grid unless given a pane of their own — here `boundariesPane` at
-  340. The outlines then read through the semi-transparent rain rather than
-  over it. Two things that make this safe: the image overlays are
-  `interactive: false`, so the polygons underneath stay clickable for the popup;
-  and Areas view removes the imagery entirely, so the choropleth is unaffected.
-  Gauge markers stay on `overlayPane` above both — their values have to stay
-  readable. `/compare` still has the old ordering.
-- The pane order is only half of it: `.region-boundary`'s white drop-shadow halo
-  is re-tuned to `radar.html`'s `2px / 0.9` as well. floodforecast's own comment
-  explains why the two go together — under the imagery, the line *and* its halo
-  are dimmed by what is drawn over them, so the pages that put boundaries on top
-  use a lighter `1.5px / 0.7`. Moving the pane without re-tuning the halo leaves
-  the outlines washed out. Note floodforecast's `templates/compare.html` is not
-  the reference here: it carries this repo's original on-top styling. The
-  under-grid treatment lives in `templates/radar.html`.
 - **The page formats its own run stamp; it does not trust `run_label`.**
   `formatRunTsGMT()` in the event page builds the dropdown label from `run_ts`,
   which is unambiguous. `run_label` is presentation, and a manifest written

@@ -153,12 +153,7 @@ body {
 .cbar-labels { position: relative; height: 13px; margin-top: 2px; font-size: 10px; color: #5f6368; font-weight: 500; }
 .cbar-label  { position: absolute; transform: translateX(-50%); white-space: nowrap; }
 
-/* Copied from floodforecast's templates/radar.html, which pairs this halo with
-   the same under-the-imagery pane order used above. Stronger than the 1.5px /
-   0.7 those pages use when boundaries sit on top: underneath the rain grid,
-   both the line and its halo get dimmed by the imagery over them, so they need
-   the extra push to still read as a background reference. */
-.region-boundary { filter: drop-shadow(0px 0px 2px rgba(255,255,255,0.9)); }
+.region-boundary { filter: drop-shadow(0 0 2.5px rgba(255,255,255,0.75)); }
 .leaflet-image-layer { image-rendering: pixelated; }
 
 .poly-tooltip {
@@ -636,15 +631,9 @@ var radarMap = L.map('radarMap', { zoomControl: false }).setView(INIT_CENTER, IN
 var ukvMap   = L.map('ukvMap',   { zoomControl: false }).setView(INIT_CENTER, INIT_ZOOM);
 var biasMap  = L.map('biasMap',  { zoomControl: false }).setView(INIT_CENTER, INIT_ZOOM);
 
-// Pane order, matching floodforecast's templates/radar.html: boundary outlines
-// sit just *below* the rainfall imagery, so the grid reads as the top layer and
-// county/catchment lines show through it rather than being drawn over the top
-// of the rain. (Leaflet's default overlayPane is 400, which is where these
-// layers used to land — above imgPane, i.e. the wrong way round.) Gauge markers
-// stay on overlayPane above both, since their values have to stay readable.
+// Dedicated pane for image overlays sits below the GeoJSON overlay pane
 [radarMap, ukvMap, biasMap].forEach(function(m) {
   m.createPane('imgPane').style.zIndex = 350;
-  m.createPane('boundariesPane').style.zIndex = 340;
 });
 
 // Zoom control lives on whichever pane is leftmost, so the buttons sit at the
@@ -822,7 +811,6 @@ var layers = { radar: {}, ukv: {}, bias: {} };
 function createBoundaryLayer(data, type, mid) {
   var nameKey = LAYER_NAME_KEY[type];
   return L.geoJSON(data, {
-    pane: 'boundariesPane',
     style: BOUNDARY_STYLES[type],
     onEachFeature: function(feature, lyr) {
       lyr.on('click', function(e) { showPolyPopup(feature.properties[nameKey], e.latlng, MAPS[mid]); });
