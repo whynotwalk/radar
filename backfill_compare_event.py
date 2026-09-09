@@ -533,6 +533,31 @@ def radar_snapshot_entry(event_id, ts):
     return entry
 
 
+def normalise_labels(frag):
+    """Re-derive a fragment's time labels from its own timestamps.
+
+    Labels are *derived at assembly*, not trusted from the fragment, so the
+    manifest has exactly one source of truth for how a time is written. A
+    fragment rendered by an older revision of this script — or by one whose
+    labels came from fetch_ukv's UK-local helpers — is normalised here rather
+    than needing its imagery re-rendered to fix a string. That is the whole
+    point: re-running `--mode meta` costs seconds, re-running `--mode ukv`
+    costs ~30k Class A operations.
+    """
+    run_ts = frag.get("run_ts")
+    if not run_ts:
+        return frag
+    frag["run_label"] = event_run_label(run_ts)
+    run_dt = fu.parse_run_dt(run_ts)
+    for step in frag.get("steps", []):
+        hours = step.get("offset_hours")
+        if hours is None:
+            continue
+        valid_ts = (run_dt + timedelta(hours=hours)).strftime("%Y%m%dT%H%MZ")
+        step["valid_label"] = event_valid_label(valid_ts)
+    return frag
+
+
 def mode_meta(r2, event_id, event):
     runs_wanted = event_runs(event)
 
@@ -540,7 +565,7 @@ def mode_meta(r2, event_id, event):
     for run_ts in runs_wanted:
         frag = fu.json_from_r2(r2, event_key(event_id, "runs", f"{run_ts}.json"))
         if frag:
-            run_entries.append(frag)
+            run_entries.append(normalise_labels(frag))
         else:
             print(f"  {run_ts}: no fragment on R2 — omitted from manifest")
 
