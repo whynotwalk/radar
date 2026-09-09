@@ -259,6 +259,61 @@ Three things to keep in mind when changing any of them:
   number — this is empirically tuned, not a guess, and there's a documented
   reason 30 threads and a naive multi-process split both underperform.
 
+## Archived event replays (`backfill_compare_event.py` / `compare-early-september/`)
+
+- `/compare` is a **nowcast** tool and everything it reads is on a short rolling
+  window: `ukv/`, `ukv_poly/`, `ukv_gauge/`, `ukv_area_ts/` are purged by
+  `cleanup_old_ukv_runs()` as soon as a run drops out of `ukv_meta.json`'s 72h
+  list, and `accum_hist/`, `accum_poly/`, `gauge_bias/` expire at 14 days. So a
+  week after any event, **the forecast half of the comparison no longer exists**
+  and the observed half is on a clock. That is what this pipeline is for.
+- `backfill_compare_event.py` rebuilds one event into `compare_events/{event_id}/`,
+  a prefix **no cleanup job touches**. The two halves are not symmetric and the
+  difference matters:
+  - **Forecast half is regenerated.** Met Office's public S3 bucket keeps its UKV
+    NetCDF far longer than we keep our renders (verified back to Sep 2024), so
+    the runs are re-downloaded and re-rendered through `fetch_ukv.py`'s own
+    functions. Not urgent — it can be redone at any time.
+  - **Observed half is copied, and this is time-critical.** Radar accumulations
+    are built from frames we no longer hold, so once `accum_hist/` expires at 14
+    days that data is gone for good. **Snapshot an event's radar side within 14
+    days or it cannot be archived at all** (`--mode radar`, and it is the first
+    job in the workflow for exactly this reason).
+- The only change to `fetch_ukv.py` is an optional `base=` key prefix on
+  `upload_schemes()`, defaulting to the live `"ukv"`. The per-step render loop is
+  deliberately **duplicated** in the backfill script rather than factored out of
+  `main()`: `main()` is the live pipeline running every three hours, and
+  reshaping it around a one-off replay is regression risk for no operational gain.
+- Events are declared in that script's `EVENTS` table (run range, observed
+  window, plus `event_start`/`event_end`/`focus_ts`/`default_run`, which let the
+  page open *on* the event instead of at the end of the archive window). Adding
+  another past event is a new entry there plus a copy of the page — no new
+  plumbing.
+- Run it from the **Backfill Compare Event** workflow (`workflow_dispatch` only).
+  `--mode ukv` shards across 6 matrix jobs; sharding is round-robin so the
+  03Z/15Z runs — which publish a 3-hourly tail past T+54h and so carry ~40% more
+  steps — spread evenly instead of piling into one long shard. Every mode is
+  idempotent: a re-run after a partial failure costs Class B ops, not Class A.
+  The `meta` job runs `if: always()` and assembles from whatever fragments are
+  actually on R2, so one failed shard means a manifest missing that run rather
+  than no page at all.
+- Cost, for reference when adding an event: ~1,000 forecast steps for a 17-run
+  event is roughly 31k R2 Class A ops, plus ~5.8k for the radar copy — about 4%
+  of the monthly free tier (see the R2 budget section above), one-off.
+- `compare-early-september/index.html` is a fork of `compare.html`, not a
+  refactor of it — the live page keeps working unchanged. It differs only in:
+  loading one static `meta.json` instead of the two live manifests (and so no
+  polling loop), prefixing the per-frame JSON side-loads with `EVENT_BASE`,
+  `../` on repo-root assets since it sits one directory down, an identity strip
+  plus a shaded event span on the timeline, and **a timezone fix**.
+- **Known bug still live in `compare.html`:** both `updatePlayerTime()` and
+  `updatePlayerTimeFromUKV()` print a UTC clock value and hardcode the suffix
+  `GMT`, which is wrong for the whole BST half of the year — and it silently
+  contradicts the UKV run dropdown beside it, whose labels `fetch_ukv.py` builds
+  in real UK local time via `_uk_local()`. The event page carries a `_ukLocal()`
+  port of that helper and is correct; `/compare` has **not** been changed. Worth
+  fixing there too, but that is a live-page change, not this feature's.
+
 ## FGS tracker (`fetch_fgs.py` / `fgscomparison/index.html`)
 
 - FGS = the FFC 5-day Flood Guidance Statement (daily ~10:30 UK, occasional

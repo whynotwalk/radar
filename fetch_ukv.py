@@ -475,14 +475,19 @@ def download_nc(s3, run_ts, valid_ts, offset, param):
 
 
 
-def upload_schemes(arr, schemes, run_ts, offset, prefix):
-    """Render arr with each scheme, upload PNGs in parallel, return {scheme_name: url}."""
+def upload_schemes(arr, schemes, run_ts, offset, prefix, base="ukv"):
+    """Render arr with each scheme, upload PNGs in parallel, return {scheme_name: url}.
+
+    `base` is the R2 key prefix the PNGs are written under. It defaults to the
+    live "ukv" prefix; backfill_compare_event.py passes its own event prefix so
+    replayed historical runs land outside the tree cleanup_old_ukv_runs() prunes.
+    """
     if arr is None:
         return None
 
     def _upload_one(sname, scheme):
         img = render_png(arr, scheme)
-        key = f"ukv/{run_ts}/{offset}_{prefix}_{sname}.png"
+        key = f"{base}/{run_ts}/{offset}_{prefix}_{sname}.png"
         png_to_r2(_r2_tl(), key, img)
         return sname, f"{R2_PUBLIC_URL}/{key}"
 

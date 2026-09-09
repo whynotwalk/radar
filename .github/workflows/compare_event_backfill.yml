@@ -1,0 +1,103 @@
+name: Backfill Compare Event
+
+# One-off (re-runnable) rebuild of a past rainfall event into a permanent R2
+# prefix, so a pinned compare page can replay it after the live 72h/14-day
+# retention windows have closed. See backfill_compare_event.py for what each
+# mode does and why the radar half is time-critical.
+
+on:
+  workflow_dispatch:
+    inputs:
+      event:
+        description: "Event id defined in backfill_compare_event.py"
+        type: string
+        default: "early_sep_2026"
+      mode:
+        description: "Which half to rebuild"
+        type: choice
+        options: [all, radar, ukv, meta]
+        default: all
+      force_rerun:
+        description: "Re-render UKV runs already present in the event prefix"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+env:
+  R2_ACCOUNT_ID:        ${{ secrets.R2_ACCOUNT_ID }}
+  R2_ACCESS_KEY_ID:     ${{ secrets.R2_ACCESS_KEY_ID }}
+  R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+  R2_BUCKET_NAME:       ${{ secrets.R2_BUCKET_NAME }}
+  R2_PUBLIC_BASE_URL:   ${{ secrets.R2_PUBLIC_BASE_URL }}
+
+jobs:
+  # The observed side first and on its own: it is a copy out of prefixes that
+  # expire 14 days after the event, so it is the part that can stop being
+  # possible. The forecast side re-renders from Met Office S3, which keeps its
+  # NetCDF far longer, so it is never the urgent half.
+  radar:
+    if: ${{ inputs.mode == 'all' || inputs.mode == 'radar' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install boto3 botocore xarray netCDF4 numpy Pillow pyproj
+      - name: Copy observed side into the event prefix
+        run: python backfill_compare_event.py --mode radar --event "${{ inputs.event }}"
+
+  ukv:
+    if: ${{ inputs.mode == 'all' || inputs.mode == 'ukv' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      # Runs are independent of each other, so a failed shard should not cancel
+      # the rest — each writes its own manifest fragment and can be re-run alone.
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4, 5, 6]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install boto3 botocore xarray netCDF4 numpy Pillow pyproj
+      - name: Re-render UKV runs (shard ${{ matrix.shard }}/6)
+        env:
+          FORCE_RERUN: ${{ inputs.force_rerun && '1' || '' }}
+        run: |
+          python backfill_compare_event.py \
+            --mode ukv --event "${{ inputs.event }}" \
+            --shard ${{ matrix.shard }} --shards 6
+
+  meta:
+    if: ${{ always() && (inputs.mode == 'all' || inputs.mode == 'meta') }}
+    needs: [radar, ukv]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install boto3 botocore xarray netCDF4 numpy Pillow pyproj
+      # Assembles from whatever fragments are actually on R2, so a partially
+      # failed shard yields a manifest missing that run rather than no page.
+      - name: Assemble event manifest
+        run: python backfill_compare_event.py --mode meta --event "${{ inputs.event }}"

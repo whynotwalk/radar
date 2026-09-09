@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- SEO -->
+<title>Early September 2026 event: UKV vs radar | Flood Forecast</title>
+<meta name="description" content="Archived case study of the 3-4 September 2026 rainfall event. Every three-hourly Met Office UKV run from Wednesday 2 September onward, verified step by step against radar and rain gauges on synchronised maps.">
+<meta name="keywords" content="UKV verification, forecast case study, September 2026 rainfall, model performance review, lead time analysis, radar verification, catchment accumulation, flood forecast, UK rainfall event">
+<meta name="author" content="Flood Forecast">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://floodforecast.co.uk/compare-early-september">
+
+<!-- Open Graph -->
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://floodforecast.co.uk/compare-early-september">
+<meta property="og:title" content="Early September 2026 event: UKV vs radar | Flood Forecast">
+<meta property="og:description" content="How every three-hourly UKV run handled the Thursday 3 September evening into Friday morning rainfall event, verified against radar and gauges.">
+<meta property="og:image" content="https://floodforecast.co.uk/static/images/og_image.png">
+<meta property="og:site_name" content="Flood Forecast">
+<meta property="og:locale" content="en_GB">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Early September 2026 event: UKV vs radar | Flood Forecast">
+<meta name="twitter:description" content="How every three-hourly UKV run handled the Thursday 3 September evening into Friday morning rainfall event, verified against radar and gauges.">
+<meta name="twitter:image" content="https://floodforecast.co.uk/static/images/og_image.png">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="https://floodforecast.co.uk/static/images/avatar.png">
+
+<!-- JSON-LD -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Early September 2026 event: UKV vs radar | Flood Forecast",
+  "url": "https://floodforecast.co.uk/compare-early-september",
+  "description": "Archived verification of every three-hourly Met Office UKV run against radar and rain gauges for the 3-4 September 2026 rainfall event.",
+  "isPartOf": { "@type": "WebSite", "url": "https://floodforecast.co.uk" },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Flood Forecast", "item": "https://floodforecast.co.uk" },
+      { "@type": "ListItem", "position": 2, "name": "Radar vs UKV", "item": "https://floodforecast.co.uk/compare" },
+      { "@type": "ListItem", "position": 3, "name": "Early September 2026", "item": "https://floodforecast.co.uk/compare-early-september" }
+    ]
+  }
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+html { height: 100%; }
+body {
+  margin: 0; padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background: #1e293b;
+  color: #3c4043;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.maps-row { flex: 1; display: flex; min-height: 0; }
+.map-wrap  { position: relative; flex: 1; overflow: hidden; }
+.map-wrap + .map-wrap { border-left: 2px solid #374151; }
+.map-pane  { width: 100%; height: 100%; }
+
+/* ── Archived-event identity strip ───────────────────────────────── */
+.event-bar {
+  display: flex; align-items: center; gap: 12px;
+  background: #0f172a; color: #e2e8f0;
+  height: 34px; flex-shrink: 0; padding: 0 12px;
+  border-bottom: 1px solid #334155;
+  position: relative; z-index: 1002;
+  font-size: 12px; white-space: nowrap; overflow: hidden;
+}
+.event-bar-main { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.event-title { font-weight: 700; color: #f8fafc; }
+.event-sub   { color: #94a3b8; overflow: hidden; text-overflow: ellipsis; }
+.event-pill {
+  margin-left: auto; flex-shrink: 0;
+  background: #1e3a5f; color: #93c5fd;
+  border: 1px solid #2563eb;
+  border-radius: 999px; padding: 2px 9px;
+  font-size: 11px; font-weight: 600;
+}
+.event-live-link {
+  flex-shrink: 0; color: #93c5fd; text-decoration: none;
+  font-size: 11px; font-weight: 600;
+}
+.event-live-link:hover { text-decoration: underline; }
+@media (max-width: 700px) {
+  .event-sub, .event-live-link { display: none; }
+}
+
+/* Shaded span marking the event itself within the wider archive window. */
+.timeline-event-span {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  height: 6px; border-radius: 3px;
+  background: rgba(37, 99, 235, 0.28);
+  border-left: 2px solid rgba(37, 99, 235, 0.8);
+  border-right: 2px solid rgba(37, 99, 235, 0.8);
+  pointer-events: none; z-index: 2;
+}
+
+/* ── Panel header strip ─────────────────────────────────────────── */
+.map-header-row {
+  display: flex; background: #1e293b;
+  height: 36px; flex-shrink: 0;
+  position: relative; z-index: 1001;
+}
+.map-header-cell {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: #f1f5f9;
+  letter-spacing: 0.2px; white-space: nowrap;
+  border-left: 2px solid #374151;
+}
+.map-header-cell:first-child { border-left: none; }
+
+.surface {
+  background: white; border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+/* ── In-map colour bar overlays ──────────────────────────────────── */
+.map-cbar {
+  position: absolute; top: 10px; right: 10px; z-index: 500;
+  background: rgba(255,255,255,0.93); border-radius: 8px;
+  padding: 7px 10px 6px; pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.14); width: 340px;
+}
+.map-cbar p {
+  font-size: 12px; font-weight: 500; color: #3c4043;
+  margin: 0 0 4px; white-space: nowrap;
+}
+.map-cbar .bias-arrows {
+  display: flex; justify-content: space-between;
+  font-size: 9px; color: #5f6368; margin-top: 2px;
+}
+.cbar { display: flex; height: 10px; border-radius: 4px; overflow: hidden; }
+.cbar-block { flex: 1; }
+.cbar-labels { position: relative; height: 13px; margin-top: 2px; font-size: 10px; color: #5f6368; font-weight: 500; }
+.cbar-label  { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+
+.region-boundary { filter: drop-shadow(0 0 2.5px rgba(255,255,255,0.75)); }
+.leaflet-image-layer { image-rendering: pixelated; }
+
+.poly-tooltip {
+  background: white; border: none; border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  font-family: 'Roboto', sans-serif; font-size: 12px; font-weight: 500;
+  padding: 5px 10px; white-space: nowrap; color: #202124;
+}
+.poly-tooltip::before { display: none; }
+
+/* Pill selects */
+select {
+  appearance: none; -webkit-appearance: none;
+  background: #f1f3f4; border: none;
+  padding: 9px 34px 9px 16px; border-radius: 24px;
+  font-family: 'Roboto', sans-serif; font-size: 13px;
+  color: #202124; font-weight: 500; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%235F6368' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+  outline: none; transition: background 0.2s; width: 100%;
+}
+select:hover { background-color: #e8eaed; }
+select:disabled { opacity: 0.4; cursor: default; pointer-events: none; }
+select option:disabled { color: #bbb; }
+
+/* Segmented view toggle */
+.seg-control {
+  display: flex; background: #f1f3f4;
+  border-radius: 24px; padding: 3px; gap: 0;
+}
+.seg-btn {
+  flex: 1; border: none; background: transparent;
+  padding: 7px 16px; border-radius: 21px;
+  font-family: 'Roboto', sans-serif; font-size: 13px;
+  font-weight: 500; color: #5f6368; cursor: pointer;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+}
+.seg-btn.seg-active {
+  background: white; color: #202124;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.18);
+}
+.seg-btn:disabled {
+  opacity: 0.35; cursor: not-allowed; pointer-events: none;
+}
+
+.info-icon-btn {
+  background: transparent; border: none; cursor: pointer; padding: 0;
+  display: flex; align-items: center; color: #5f6368; transition: color 0.2s; flex-shrink: 0;
+}
+.info-icon-btn:hover { color: #202124; }
+.info-modal-backdrop {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+  z-index: 3000; align-items: center; justify-content: center;
+}
+.info-modal-backdrop.open { display: flex; }
+.info-modal {
+  background: white; border-radius: 14px; padding: 22px 24px 18px; max-width: 400px; width: 90%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3); position: relative;
+}
+.info-modal h3 {
+  font-size: 13px; font-weight: 700; color: #1e293b; margin: 0 0 12px;
+  display: flex; align-items: center; gap: 7px;
+}
+.info-modal ul { margin: 0; padding: 0; list-style: none; }
+.info-modal li {
+  font-size: 12px; color: #475569; line-height: 1.6; padding: 7px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+.info-modal li:last-child { border-bottom: none; padding-bottom: 0; }
+.info-modal li strong { color: #1e293b; font-weight: 600; }
+.info-modal a { color: #1a73e8; }
+.info-modal-close {
+  position: absolute; top: 14px; right: 16px; background: transparent; border: none;
+  cursor: pointer; padding: 4px; color: #94a3b8; font-size: 18px; line-height: 1;
+}
+.info-modal-close:hover { color: #475569; }
+
+/* ── Player panel ─────────────────────────────────────────────────── */
+.player-panel {
+  position: fixed; bottom: 30px; left: 50%;
+  transform: translateX(-50%); padding: 12px 20px;
+  z-index: 1000; width: 95%; max-width: 1150px;
+  display: flex; align-items: center; gap: 14px;
+}
+
+.control-group { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; flex-shrink: 0; }
+.control-label  { font-size: 10px; font-weight: 600; color: #3c4043; letter-spacing: 0.5px; padding-left: 8px; }
+
+.timeline-container { position: relative; flex-grow: 1; height: 48px; display: flex; align-items: center; }
+.timeline-track {
+  position: absolute; top: 50%; left: 9px; right: 9px;
+  height: 6px; margin-top: -3px;
+  background: #e8eaed; border-radius: 3px; z-index: 1; pointer-events: none;
+}
+
+#timeSlider {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; background: transparent; z-index: 3; margin: 0; position: relative;
+}
+#timeSlider:focus { outline: none; }
+#timeSlider::-webkit-slider-runnable-track { height: 6px; background: transparent; border-radius: 3px; }
+#timeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 18px; width: 18px; border-radius: 50%;
+  background: #202124; border: 2px solid white; cursor: pointer;
+  margin-top: -6px; box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  transition: transform 0.1s, box-shadow 0.1s;
+}
+#timeSlider::-webkit-slider-thumb:hover {
+  transform: scale(1.15); box-shadow: 0 3px 6px rgba(0,0,0,0.4);
+}
+
+#playerDateTime {
+  flex-shrink: 0; width: 110px; display: flex; flex-direction: column; gap: 1px;
+  padding-left: 12px; border-left: 1px solid #e8eaed; overflow: hidden;
+}
+#playerDateLine { font-size: 10px; color: #3c4043; font-weight: 500; white-space: nowrap; overflow: hidden; }
+#playerTimeLine { font-size: 16px; font-weight: 700; color: #202124; white-space: nowrap; overflow: hidden; }
+
+/* No-comparison notice */
+#noCompare {
+  position: fixed; top: 50%; left: 33.3%;
+  transform: translate(-50%, -50%);
+  background: rgba(255,255,255,0.92); border-radius: 10px;
+  padding: 14px 22px; font-size: 13px; color: #5f6368;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12); z-index: 600;
+  pointer-events: none; display: none; text-align: center;
+}
+
+@media (max-width: 900px) {
+  .map-header-cell { font-size: 9px; letter-spacing: 0.2px; padding: 0 4px; }
+  .map-cbar { width: calc(100% - 20px); max-width: 320px; }
+  .player-panel {
+    bottom: 6px;
+    width: calc(100% - 12px);
+    padding: 7px 10px;
+    gap: 4px 6px;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    align-items: flex-end;
+  }
+  .player-panel .control-group { flex: 1 1 auto; min-width: 0; max-width: 130px; }
+  .control-label { font-size: 9px; padding-left: 6px; }
+  .player-panel .control-group select { font-size: 11px; padding: 5px 22px 5px 9px; background-position: right 9px center; border-radius: 12px; }
+  .player-panel .control-group .seg-btn { font-size: 11px; padding: 5px 8px; }
+  .timeline-container { flex: 1 1 100%; order: 10; height: 28px; margin-top: 10px; }
+  #playerDateTime {
+    flex: 0 0 auto;
+    order: 11;
+    width: auto;
+    padding-left: 8px;
+    border-left: 1px solid #e8eaed;
+  }
+  #playerDateLine { font-size: 9px; }
+  #playerTimeLine { font-size: 13px; }
+}
+
+.area-value-label {
+  background: transparent;
+  border: none;
+  color: #202124;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+  white-space: nowrap;
+  text-shadow: 
+    -1px -1px 0 #fff,  
+     1px -1px 0 #fff,
+    -1px  1px 0 #fff,
+     1px  1px 0 #fff,
+     0px 0px 3px #fff;
+  pointer-events: none;
+}
+.rg-wrap {
+  display: flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px;
+}
+.rg-icon {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.55);
+  transform: translateZ(0); will-change: transform;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Roboto', sans-serif;
+  font-size: 8.5px; font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+  box-sizing: border-box;
+  cursor: pointer;
+  line-height: 1;
+}
+.rg-icon.rg-nodata {
+  width: 7px; height: 7px;
+  background: #90a4ae;
+  opacity: 0.35;
+  border: none;
+}
+
+/* Stack the three comparison maps vertically on phones — side-by-side is unreadable */
+@media (max-width: 720px) {
+  .maps-row { flex-direction: column; }
+  .map-wrap + .map-wrap { border-left: none; border-top: 2px solid #374151; }
+  .map-header-row { display: none; }
+  .map-cbar { top: 6px; right: 6px; padding: 5px 8px 4px; width: calc(100% - 16px); max-width: 280px; }
+  .map-cbar p { font-size: 9px; margin-bottom: 2px; }
+  .map-cbar::before {
+    content: attr(data-pane-label);
+    display: block;
+    font-size: 9px;
+    font-weight: 700;
+    color: #1e293b;
+    letter-spacing: 0.3px;
+    margin-bottom: 3px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="event-bar">
+  <div class="event-bar-main">
+    <span class="event-title" id="eventTitle">Early September 2026</span>
+    <span class="event-sub" id="eventSub">Thu 3 Sep evening – Fri 4 Sep morning</span>
+  </div>
+  <span class="event-pill">Archived event</span>
+  <a class="event-live-link" href="/compare">Live compare &rsaquo;</a>
+</div>
+
+<div class="map-header-row">
+  <div class="map-header-cell" id="obsHeader">Radar obs</div>
+  <div class="map-header-cell" id="ukvBadge">UKV forecast</div>
+  <div class="map-header-cell" id="biasHeader">Bias (UKV &minus; Radar)</div>
+  <div style="display:flex;align-items:center;padding:0 12px;flex-shrink:0;">
+    <button class="info-icon-btn" onclick="toggleInfoModal()" title="About this data" style="color:#94a3b8;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+    </button>
+  </div>
+</div>
+<h1 style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;">UK Radar vs UKV Rainfall Comparison</h1>
+<div class="maps-row">
+  <div class="map-wrap">
+    <div id="radarMap" class="map-pane"></div>
+    <div class="map-cbar" id="accumCbarRadar" data-pane-label="Radar obs">
+      <p>Accumulation (mm)</p>
+      <div class="cbar" id="accumCbarR"></div>
+      <div class="cbar-labels" id="accumCbarRLabels"></div>
+    </div>
+  </div>
+  <div class="map-wrap">
+    <div id="ukvMap" class="map-pane"></div>
+    <div class="map-cbar" id="accumCbarUKV" data-pane-label="UKV forecast">
+      <p>Accumulation (mm)</p>
+      <div class="cbar" id="accumCbarU"></div>
+      <div class="cbar-labels" id="accumCbarULabels"></div>
+    </div>
+  </div>
+  <div class="map-wrap">
+    <div id="biasMap" class="map-pane"></div>
+    <div class="map-cbar" id="biasCbarOverlay" data-pane-label="Bias (UKV − Radar)">
+      <p>Bias &mdash; UKV minus Radar (mm)</p>
+      <div class="cbar" id="biasCbar"></div>
+      <div class="cbar-labels" id="biasCbarLabels"></div>
+      <div class="bias-arrows"><span>&#9664; Under</span><span>Over &#9654;</span></div>
+    </div>
+  </div>
+</div>
+
+<div id="noCompare">No radar data overlaps this UKV run's valid time range.</div>
+
+<!-- Player panel -->
+<div class="player-panel surface">
+
+  <div class="control-group">
+    <span class="control-label">Compare vs</span>
+    <div class="seg-control">
+      <button id="btnRadarSrc" class="seg-btn seg-active" onclick="setCompareSource('radar')">Radar</button>
+      <button id="btnGaugeSrc" class="seg-btn" onclick="setCompareSource('gauge')">Gauges</button>
+    </div>
+  </div>
+
+  <div class="control-group">
+    <span class="control-label">View</span>
+    <div class="seg-control">
+      <button id="btnGrid" class="seg-btn seg-active" onclick="setViewMode('grid')">Grid</button>
+      <button id="btnArea" class="seg-btn" onclick="setViewMode('area')">Areas</button>
+    </div>
+  </div>
+
+  <div class="control-group" id="boundaryControl">
+    <span class="control-label">Areas</span>
+    <select id="boundarySelect" onchange="onBoundaryChange(this.value)">
+      <option value="catchments" selected>Catchments</option>
+      <option value="regions">Regions</option>
+      <option value="counties">Counties</option>
+      <option value="summary">Summary</option>
+      <option value="grid">Grid (20km)</option>
+    </select>
+  </div>
+
+  <div class="control-group">
+    <span class="control-label">Period</span>
+    <select id="periodSelect" onchange="setPeriod(this.value)">
+      <option value="1hr">1 Hour</option>
+      <option value="3hr" selected>3 Hours</option>
+      <option value="6hr">6 Hours</option>
+      <option value="12hr">12 Hours</option>
+      <option value="24hr">24 Hours</option>
+      <option value="48hr">48 Hours</option>
+      <option value="run">Run so far</option>
+    </select>
+  </div>
+
+  <div class="timeline-container">
+    <div class="timeline-track"></div>
+    <div class="timeline-event-span" id="timelineEventSpan" style="display:none;"></div>
+    <input type="range" id="timeSlider" min="0" max="0" step="1" value="0"
+           oninput="setSnapshot(parseInt(this.value))">
+  </div>
+
+  <div id="playerDateTime">
+    <div id="playerDateLine">—</div>
+    <div id="playerTimeLine">—</div>
+  </div>
+
+  <div class="control-group">
+    <span class="control-label">UKV Run</span>
+    <select id="runSelect" onchange="setRun(parseInt(this.value))">
+      <option>Loading&hellip;</option>
+    </select>
+  </div>
+
+  <div class="control-group">
+    <span class="control-label">Colour scale</span>
+    <select id="schemeSelect" onchange="setScheme(this.value)">
+      <option value="norm">Normal</option>
+      <option value="high">High events</option>
+      <option value="met" selected>Alternative</option>
+    </select>
+  </div>
+
+
+</div>
+
+<!-- Data info modal -->
+<div id="infoModalBackdrop" class="info-modal-backdrop" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="info-modal">
+    <button class="info-modal-close" onclick="toggleInfoModal()" title="Close">&times;</button>
+    <h3>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a73e8" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      About this data
+    </h3>
+    <p style="margin:0 0 10px; font-size:12.5px; line-height:1.55; color:#3c4043;">
+      This is a fixed archive of one past event, not a live view. It holds every
+      three-hourly UKV run from <strong>Wed 2 Sep 00Z</strong> to
+      <strong>Fri 4 Sep 00Z</strong>, each verified against the radar and gauge
+      observations that actually followed. Step through a single run with the
+      slider to see how it verified, or hold the time steady and change run to
+      see how successive runs converged on the event as lead time shortened.
+    </p>
+    <ul>
+      <li><strong>Radar:</strong> Met Office ODIM H5 1km composite, 15-minute observations as recorded at the time. <a href="https://www.metoffice.gov.uk/services/data/share-your-data" target="_blank">British Crown copyright Met Office</a> — <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">CC BY-SA 4.0</a>.</li>
+      <li><strong>UKV forecast:</strong> Met Office UK Variable resolution model, ~1.5km grid. Only the three-hourly synoptic runs (00/03/06/09/12/15/18/21Z) are shown — the off-cycle hourly runs publish to T+11h only, too short to carry useful lead time. Re-rendered from the Met Office archive through the same code path the live page uses. <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank">British Crown copyright Met Office — CC BY-SA 4.0</a>.</li>
+      <li><strong>Rain gauges:</strong> Natural Resources Wales (NRW) and Environment Agency 15-minute tipping-bucket readings.</li>
+      <li><strong>Catchment boundaries:</strong> National River Flow Archive (2014). NERC Environmental Information Data Centre. <a href="https://doi.org/10.5285/1957166d-7523-44f4-b279-aa5314163237" target="_blank">doi:10.5285/1957166d</a>.</li>
+      <li><strong>Region / county boundaries:</strong> Office for National Statistics (ONS). Open Government Licence.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+function htmlEsc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function toggleInfoModal() { document.getElementById('infoModalBackdrop').classList.toggle('open'); }
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') document.getElementById('infoModalBackdrop').classList.remove('open'); });
+var R2_BASE = 'https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev';
+
+// This page replays one archived event rather than the live feeds. Everything
+// it reads lives under a single permanent R2 prefix written by
+// backfill_compare_event.py — the live ukv/ and accum_hist/ trees this page's
+// /compare sibling uses are pruned after 72h and 14 days respectively, so the
+// event's data would not survive there. EVENT_ID must match an id in that
+// script's EVENTS table.
+var EVENT_ID   = 'early_sep_2026';
+// Page sits one directory down, so repo-root assets need to climb out.
+var LOCAL_BASE = '../';
+var R2_CDN  = 'https://radar.floodforecast.co.uk';
+function toCDN(url) { return url ? url.replace(R2_BASE, R2_CDN) : url; }
+var EVENT_BASE = R2_CDN + '/compare_events/' + EVENT_ID;
+function cdnJson(r)  { return r.text().then(function(t) { return JSON.parse(t.replace(new RegExp(R2_BASE.replace(/\./g,'\\.'), 'g'), R2_CDN)); }); }
+
+// ── Colour schemes ─────────────────────────────────────────────────
+var _STD = ['#e0f3ff','#81d4fa','#03a9f4','#01579b','#2e7d32','#fbc02d','#ef6c00','#c62828','#6a1b9a'];
+var SCHEMES = {
+  norm: { bounds: [0.5,1,2,5,10,20,40,80,160],   colors: _STD },
+  high: { bounds: [2,5,10,25,50,100,150,200,350], colors: _STD },
+  met:  {
+    bounds: [0.03,1,5,10,20,40,60,80,100,120,140,160,180],
+    colors: ['#3A6CFF','#00FF00','#FFFF95','#FFD563','#FF9618','#E86100','#BA2000','#CC537D','#DB92DC','#FF02FF','#FFFFFF','#C8C8C8','#BFBF00']
+  }
+};
+
+// ── Bias colour scale ─────────────────────────────────────────────
+// 10 bins: split near-zero into faint blue/orange so any bias is coloured
+var BIAS_BOUNDS = [-30, -15, -10, -5, -2, 2, 5, 10, 15, 30];
+var BIAS_COLORS = ['#67001f','#a50026','#d73027','#fdae61','#fdd9a0','#d4d4d4','#c6e2f0','#abd9e9','#74add1','#2166ac','#023858'];
+
+// ── Period key mapping ───────────────────────────────────────────
+var PERIOD_LABELS  = { '1hr':'1 Hour', '3hr':'3 Hours', '6hr':'6 Hours', '12hr':'12 Hours', '24hr':'24 Hours', '48hr':'48 Hours', 'run':'Run so far' };
+var PERIOD_UKV_KEY = { '1hr':'accum_1h', '3hr':'accum_3h', '6hr':'accum_6h', '12hr':'accum_12h', '24hr':'accum_24h', '48hr':'accum_48h', 'run':'accum_1h' };
+
+// ── Image bounds ─────────────────────────────────────────────────
+var RADAR_BOUNDS = [[43.7009,-17.9739],[62.9207,16.1291]];
+var UKV_BOUNDS   = [[43.0,  -26.0],   [63.0,   17.0  ]];
+
+// ── State ────────────────────────────────────────────────────────
+var snapshots        = [];
+var validSnapIndices = [];   // positions in snapshots[] that match current UKV run
+var currentIdx       = 0;   // absolute index into snapshots[]
+var currentPeriod    = '3hr';
+var currentRunIdx    = 0;
+var currentScheme    = 'met';
+var currentBoundary      = 'catchments';
+var currentViewMode      = 'grid';
+var currentCompareSource = 'radar'; // 'radar' | 'gauge'
+var ukvMeta              = null;
+var polyCache            = {};
+var currentRadarVals     = null;
+var currentUKVVals       = null;
+
+// ── Gauge state ──────────────────────────────────────────────────
+var gaugeStations    = null;   // {stationId: {lat, lon, name}}
+var gaugeMarkerGroup = null;   // L.layerGroup on radarMap (gauge values)
+var ukvMarkerGroup   = null;   // L.layerGroup on ukvMap   (UKV values at gauges)
+var biasMarkerGroup  = null;   // L.layerGroup on biasMap  (UKV − gauge bias)
+
+var labelGroups = {
+  radar: L.layerGroup(),
+  ukv: L.layerGroup(),
+  bias: L.layerGroup()
+};
+
+function fmtVal(val, isBias) {
+  var abs = Math.abs(val);
+  var str = abs < 1 ? abs.toFixed(1) : Math.round(abs).toString();
+  if (isBias) {
+    return (val > 0 ? '+' : val < 0 ? '-' : '') + str;
+  }
+  return str;
+}
+
+// Byte offset into gauge_bias station values array per period
+// (triplets [gauge, radar_pt, radar_5km] for 1hr,3hr,6hr,12hr,24hr,48hr,5d)
+var GAUGE_PERIOD_IDX = { '1hr': 0, '3hr': 3, '6hr': 6, '12hr': 9, '24hr': 12, '48hr': 15 };
+
+// ── Boundary config ──────────────────────────────────────────────
+var BOUNDARY_FILES = {
+  regions:    'uk_regions.geojson',
+  counties:   'uk-counties.geojson',
+  catchments: 'uk_catchments.geojson',
+  grid:       'uk_grid_20km.geojson',
+  summary:    'rainfallsummarypolygons.geojson'
+};
+var LAYER_NAME_KEY = { regions: 'rgn19nm', counties: 'name', catchments: 'HA_NAME', grid: 'name', summary: 'NAME' };
+var BOUNDARY_STYLES = {
+  regions:    { color: '#5f6368', weight: 1.5, fillOpacity: 0, className: 'region-boundary' },
+  counties:   { color: '#5f6368', weight: 1.0, fillOpacity: 0, className: 'region-boundary' },
+  catchments: { color: '#5f6368', weight: 1.0, fillOpacity: 0, className: 'region-boundary' },
+  grid:       { color: '#5f6368', weight: 0.7, fillOpacity: 0, className: 'region-boundary' },
+  summary:    { color: '#5f6368', weight: 1.2, fillOpacity: 0, className: 'region-boundary' }
+};
+
+// ── Map initialisation ──────────────────────────────────────────
+var INIT_CENTER = [54.5, -3.5], INIT_ZOOM = 5;
+var radarMap = L.map('radarMap', { zoomControl: false }).setView(INIT_CENTER, INIT_ZOOM);
+var ukvMap   = L.map('ukvMap',   { zoomControl: false }).setView(INIT_CENTER, INIT_ZOOM);
+var biasMap  = L.map('biasMap',  { zoomControl: false }).setView(INIT_CENTER, INIT_ZOOM);
+
+// Dedicated pane for image overlays sits below the GeoJSON overlay pane
+[radarMap, ukvMap, biasMap].forEach(function(m) {
+  m.createPane('imgPane').style.zIndex = 350;
+});
+
+L.control.zoom({ position: 'topleft' }).addTo(radarMap);
+
+var TILE_URL  = 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_27ic_1_fde6c8c094980efec9791cfc';
+var TILE_OPTS = { maxZoom: 20, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/">CARTO</a>' };
+[radarMap, ukvMap, biasMap].forEach(function(m) { L.tileLayer(TILE_URL, TILE_OPTS).addTo(m); });
+
+var MAPS = { radar: radarMap, ukv: ukvMap, bias: biasMap };
+
+// Image overlay instances (created on first use)
+var radarOverlay = null;
+var ukvOverlay   = null;
+
+// ── Map synchronisation ─────────────────────────────────────────
+var _syncing = false;
+function syncMaps(src) {
+  if (_syncing) return;
+  _syncing = true;
+  var c = src.getCenter(), z = src.getZoom();
+  [radarMap, ukvMap, biasMap].forEach(function(m) {
+    if (m !== src) m.setView(c, z, { animate: false });
+  });
+  _syncing = false;
+}
+radarMap.on('moveend', function() { syncMaps(radarMap); });
+ukvMap.on('moveend',   function() { syncMaps(ukvMap); });
+biasMap.on('moveend',  function() { syncMaps(biasMap); });
+
+// ── Colour utilities ─────────────────────────────────────────────
+function mmToFillColor(mm, scheme) {
+  if (mm == null) return null;
+  var s = SCHEMES[scheme];
+  if (mm < s.bounds[0]) return null;
+  for (var i = s.bounds.length - 1; i >= 0; i--) {
+    if (mm >= s.bounds[i]) return s.colors[i];
+  }
+  return null;
+}
+
+function biasFillColor(mm) {
+  if (mm == null) return null;
+  for (var i = 0; i < BIAS_BOUNDS.length; i++) {
+    if (mm < BIAS_BOUNDS[i]) return BIAS_COLORS[i];
+  }
+  return BIAS_COLORS[BIAS_BOUNDS.length];
+}
+
+function _buildCbar(cbarId, labelsId, colors, bounds) {
+  var cbar = document.getElementById(cbarId), labels = document.getElementById(labelsId);
+  if (!cbar || !labels) return;
+  cbar.innerHTML = '';
+  colors.forEach(function(c) { var b = document.createElement('div'); b.className = 'cbar-block'; b.style.background = c; cbar.appendChild(b); });
+  labels.innerHTML = '';
+  var n = colors.length;
+  bounds.forEach(function(v, i) {
+    var pct = (i + 0.5) / n * 100;
+    var el = document.createElement('span'); el.className = 'cbar-label';
+    el.style.left = pct.toFixed(1) + '%';
+    el.textContent = (typeof v === 'number' && v > 0 && bounds[0] < 0 ? '+' : '') + (Math.abs(v) < 1 ? v : Math.round(v));
+    labels.appendChild(el);
+  });
+}
+
+function buildAccumCbar() {
+  var s = SCHEMES[currentScheme];
+  _buildCbar('accumCbarR', 'accumCbarRLabels', s.colors, s.bounds);
+  _buildCbar('accumCbarU', 'accumCbarULabels', s.colors, s.bounds);
+}
+
+function buildBiasCbar() {
+  _buildCbar('biasCbar', 'biasCbarLabels', BIAS_COLORS, BIAS_BOUNDS);
+}
+
+// ── Valid snapshot filtering ──────────────────────────────────────
+function _snapsForPeriod(run, ukvPeriodKey) {
+  if (!run || !run.steps) return [];
+  var runDt = parseRunDt(run.run_ts);
+  if (!runDt) return [];
+
+  var latestSnapMs = radarTsToDt(snapshots[snapshots.length - 1].ts).getTime();
+  var result = [], usedSet = {};
+  run.steps.forEach(function(step) {
+    if (!step[ukvPeriodKey]) return;
+    var validMs = runDt.getTime() + step.offset_hours * 3600000;
+    // Only compare periods that have already closed (valid time ≤ latest radar snapshot)
+    if (validMs > latestSnapMs) return;
+    // Find the latest radar snapshot within the 60-min window before (or at) the UKV valid time
+    var bestIdx = -1, bestSnapMs = -Infinity;
+    snapshots.forEach(function(snap, i) {
+      var snapMs = radarTsToDt(snap.ts).getTime();
+      var diff = validMs - snapMs;
+      if (diff >= 0 && diff < 3600000 && snapMs > bestSnapMs) {
+        bestSnapMs = snapMs; bestIdx = i;
+      }
+    });
+    if (bestIdx >= 0 && !usedSet[bestIdx]) {
+      usedSet[bestIdx] = true; result.push(bestIdx);
+    }
+  });
+  result.sort(function(a, b) { return a - b; });
+  return result;
+}
+
+// autoPickPeriod: true on init / run change so a period with actual data is chosen;
+// false when the user has explicitly selected a period (slider simply stops at boundary).
+function computeValidSnapIndices(goToEnd, autoPickPeriod) {
+  var run = ukvMeta && ukvMeta.runs && ukvMeta.runs[currentRunIdx];
+  if (!run || !snapshots.length) {
+    validSnapIndices = snapshots.map(function(_, i) { return i; });
+    document.getElementById('noCompare').style.display = 'none';
+  } else {
+    validSnapIndices = _snapsForPeriod(run, PERIOD_UKV_KEY[currentPeriod]);
+
+    // On init / run change: auto-pick a period that actually has data
+    if (!validSnapIndices.length && autoPickPeriod) {
+      var tryOrder = ['3hr','6hr','12hr','1hr','24hr','48hr'];
+      for (var pi = 0; pi < tryOrder.length; pi++) {
+        if (tryOrder[pi] === currentPeriod) continue;
+        var snaps = _snapsForPeriod(run, PERIOD_UKV_KEY[tryOrder[pi]]);
+        if (snaps.length) {
+          currentPeriod = tryOrder[pi];
+          document.getElementById('periodSelect').value = currentPeriod;
+          validSnapIndices = snaps;
+          break;
+        }
+      }
+    }
+
+    // Warning: only when there is truly no temporal overlap (run entirely future/past)
+    var anyMatch = snapshots.some(function(snap) {
+      return !!findMatchedUKVStep(run, radarTsToDt(snap.ts));
+    });
+    document.getElementById('noCompare').style.display = anyMatch ? 'none' : 'block';
+
+    // Fallback: show all snapshots if no period-specific match found
+    if (!validSnapIndices.length) {
+      validSnapIndices = snapshots.map(function(_, i) { return i; });
+    }
+  }
+
+  var slider = document.getElementById('timeSlider');
+  slider.max = Math.max(0, validSnapIndices.length - 1);
+  var newPos = goToEnd ? validSnapIndices.length - 1 : validSnapIndices.lastIndexOf(currentIdx);
+  if (newPos < 0) newPos = validSnapIndices.length - 1;
+  newPos = Math.max(0, newPos);
+  slider.value = newPos;
+  if (validSnapIndices.length) currentIdx = validSnapIndices[newPos];
+}
+
+// ── Period select availability ────────────────────────────────────
+function updatePeriodSelect(ukvStep) {
+  var snap = snapshots[currentIdx];
+  var sel  = document.getElementById('periodSelect');
+
+  Array.from(sel.options).forEach(function(opt) {
+    var p      = opt.value;
+    var ukvKey = PERIOD_UKV_KEY[p];
+    var obsOk  = (p === 'run') ? true : (currentCompareSource === 'gauge' ? true : !!(snap && snap[p]));
+    var ok     = !!(obsOk && ukvStep && ukvStep[ukvKey]) && (p !== 'run' || currentCompareSource !== 'gauge');
+    opt.disabled    = !ok;
+    opt.textContent = PERIOD_LABELS[p] + (ok ? '' : ' —');
+  });
+  // Period never auto-switches; slider is already constrained to steps where currentPeriod has data.
+}
+
+// ── Boundary / GeoJSON layer management ─────────────────────────
+var geojsonData = {};
+var layers = { radar: {}, ukv: {}, bias: {} };
+
+function createBoundaryLayer(data, type, mid) {
+  var nameKey = LAYER_NAME_KEY[type];
+  return L.geoJSON(data, {
+    style: BOUNDARY_STYLES[type],
+    onEachFeature: function(feature, lyr) {
+      lyr.on('click', function(e) { showPolyPopup(feature.properties[nameKey], e.latlng, MAPS[mid]); });
+    }
+  });
+}
+
+// ── Popup (persistent, updates with slider) ──────────────────────
+var _openPopup   = null;  // {name, latlng, map}
+var _activePopup = null;  // L.popup instance
+var _chartData   = null;  // {runTs, runMs, endMs, ukvPoints, radarPoints, maxY}
+
+function _popupShell(name) {
+  return '<div style="font-size:12px;font-family:Roboto,sans-serif;width:384px;">' +
+    '<b style="font-size:13px;">' + htmlEsc(name) + '</b>' +
+    '<div id="popup-stats" style="margin-top:6px;"></div>' +
+    '<div id="popup-chart-wrap" style="margin-top:10px;">' +
+      '<svg id="popup-chart" xmlns="http://www.w3.org/2000/svg" width="364" height="210" style="display:block;"></svg>' +
+      '<div id="popup-chart-msg" style="text-align:center;font-size:11px;color:#94a3b8;padding:4px 0;">Loading chart…</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function _shortRunLabel(runTs) {
+  var m = runTs.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})Z$/);
+  if (!m) return '';
+  var mon = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return +m[3] + ' ' + mon[+m[2]-1] + ' ' + m[4] + 'Z';
+}
+
+function _popupStatsHtml(name) {
+  var rMm  = currentRadarVals ? currentRadarVals[name] : null;
+  var uMm  = currentUKVVals  ? currentUKVVals[name]   : null;
+  var bias = (rMm != null && uMm != null) ? (uMm - rMm) : null;
+  var timeStr = document.getElementById('playerTimeLine').textContent || '—';
+  function fmm(mm) { return mm != null ? '<b>' + mm.toFixed(1) + ' mm</b>' : '<span style="color:#94a3b8">—</span>'; }
+  var html = '<table style="border-collapse:collapse;width:100%;">' +
+    '<tr><td colspan="2" style="color:#666;font-size:10px;font-weight:600;padding-bottom:5px;">' +
+      currentPeriod + ' accumulation ending ' + timeStr +
+    '</td></tr>' +
+    '<tr><td style="padding:3px 12px 3px 0;color:#1e3a5f;font-weight:500;">' + (currentCompareSource === 'gauge' ? 'Gauges' : 'Radar') + '</td><td>' + fmm(rMm) + '</td></tr>' +
+    '<tr><td style="padding:3px 12px 3px 0;color:#7f1d1d;font-weight:500;">UKV</td><td>' + fmm(uMm) + '</td></tr>';
+  if (bias != null) {
+    var sign = bias >= 0 ? '+' : '';
+    var arrow = bias > 1 ? '&#9650; over' : bias < -1 ? '&#9660; under' : '&#8776; neutral';
+    var bc = bias > 0.5 ? '#c62828' : bias < -0.5 ? '#1565c0' : '#5f6368';
+    html += '<tr><td style="padding:6px 12px 3px 0;border-top:1px solid #e8eaed;color:#5f6368;font-weight:500;">Bias</td>' +
+      '<td style="border-top:1px solid #e8eaed;font-weight:700;color:' + bc + ';">' + sign + bias.toFixed(1) + ' mm <small>' + arrow + '</small></td></tr>';
+  }
+  html += '</table>';
+  return html;
+}
+
+function _updatePopupStats(name) {
+  var el = _activePopup && _activePopup.getElement();
+  var statsEl = el && el.querySelector('#popup-stats');
+  if (statsEl) statsEl.innerHTML = _popupStatsHtml(name);
+}
+
+function refreshOpenPopup() {
+  if (!_openPopup || !_activePopup) return;
+  var el = _activePopup.getElement();
+  if (!el) return;
+  _updatePopupStats(_openPopup.name);
+  var run = ukvMeta && ukvMeta.runs && ukvMeta.runs[currentRunIdx];
+  var curRunTs = run && run.run_ts;
+  if (_chartData && _chartData.runTs !== curRunTs) {
+    _chartData = null;
+    var msg = el.querySelector('#popup-chart-msg');
+    if (msg) { msg.textContent = 'Loading chart…'; msg.style.display = ''; }
+    var svgEl = el.querySelector('#popup-chart');
+    if (svgEl) svgEl.innerHTML = '';
+    setTimeout(function() { if (_openPopup) _loadChartData(_openPopup.name); }, 0);
+    return;
+  }
+  _redrawChart();
+}
+
+function showPolyPopup(name, latlng, map) {
+  var newArea = !_openPopup || _openPopup.name !== name;
+  _openPopup = {name: name, latlng: latlng, map: map};
+  if (!_activePopup) {
+    _activePopup = L.popup({ maxWidth: 420, minWidth: 400 });
+    _activePopup.on('remove', function() { _openPopup = null; _activePopup = null; _chartData = null; });
+  }
+  if (newArea) {
+    _chartData = null;
+    _activePopup.setLatLng(latlng).setContent(_popupShell(name)).openOn(map);
+    _updatePopupStats(name);
+    setTimeout(function() { _loadChartData(name); }, 0);
+  } else {
+    _activePopup.setLatLng(latlng);
+    _updatePopupStats(name);
+    _redrawChart();
+  }
+}
+
+function _loadChartData(name) {
+  var run = ukvMeta && ukvMeta.runs && ukvMeta.runs[currentRunIdx];
+  if (!run) return;
+  var loadRunTs = run.run_ts;
+  var ukvTsUrl  = EVENT_BASE + '/ukv_area_ts/' + loadRunTs + '.json';
+  var matchedIdxs = _snapsForPeriod(run, 'accum_1h');
+  loadCachedJson(ukvTsUrl, function(ukvAreaTs) {
+    if (!_openPopup || _openPopup.name !== name) return;
+    var curRun = ukvMeta && ukvMeta.runs && ukvMeta.runs[currentRunIdx];
+    if (!curRun || curRun.run_ts !== loadRunTs) return;
+    _loadRadarPolyBatch(matchedIdxs, function(radarPolys) {
+      if (!_openPopup || _openPopup.name !== name) return;
+      var curRun2 = ukvMeta && ukvMeta.runs && ukvMeta.runs[currentRunIdx];
+      if (!curRun2 || curRun2.run_ts !== loadRunTs) return;
+      _buildChartData(name, run, ukvAreaTs, matchedIdxs, radarPolys);
+      _redrawChart();
+      var el = _activePopup && _activePopup.getElement();
+      var msg = el && el.querySelector('#popup-chart-msg');
+      if (msg) msg.style.display = 'none';
+    });
+  });
+}
+
+function _loadRadarPolyBatch(indices, cb) {
+  if (!indices.length) { cb({}); return; }
+  var results = {}, pending = indices.length;
+  indices.forEach(function(idx) {
+    var snap = snapshots[idx];
+    var url = EVENT_BASE + '/accum_poly/' + snap.ts + '.json';
+    loadCachedJson(url, function(data) {
+      results[snap.ts] = data;
+      if (--pending === 0) cb(results);
+    });
+  });
+}
+
+function _niceMax(v) {
+  if (v <= 0) return 1;
+  var mag = Math.pow(10, Math.floor(Math.log10(v)));
+  var frac = v / mag;
+  var nice = frac <= 1 ? 1 : frac <= 2 ? 2 : frac <= 5 ? 5 : 10;
+  return nice * mag;
+}
+
+function _buildChartData(name, run, ukvAreaTs, matchedIdxs, radarPolys) {
+  var runDt = parseRunDt(run.run_ts);
+  if (!runDt) return;
+  var runMs = runDt.getTime();
+  var endMs = runMs + run.forecast_hours * 3600000;
+
+  var ukvPoints = [];
+  var ukvCum = 0;
+  if (ukvAreaTs) {
+    var stepHours = ukvAreaTs.step_hours || [];
+    var areaVals  = ukvAreaTs[currentBoundary] && ukvAreaTs[currentBoundary][name];
+    if (areaVals) {
+      for (var i = 0; i < stepHours.length; i++) {
+        var v = areaVals[i];
+        if (v != null) { ukvCum += v; ukvPoints.push([runMs + stepHours[i] * 3600000, ukvCum]); }
+      }
+    }
+  }
+
+  var radarPoints = [];
+  var radarCum = 0;
+  var sortedIdxs = matchedIdxs.slice().sort(function(a, b) {
+    return radarTsToDt(snapshots[a].ts).getTime() - radarTsToDt(snapshots[b].ts).getTime();
+  });
+  sortedIdxs.forEach(function(idx) {
+    var snap = snapshots[idx];
+    var poly = radarPolys[snap.ts];
+    if (!poly) return;
+    var v = poly[currentBoundary] && poly[currentBoundary]['1hr'] && poly[currentBoundary]['1hr'][name];
+    if (v == null) return;
+    radarCum += v;
+    radarPoints.push([radarTsToDt(snap.ts).getTime(), radarCum]);
+  });
+
+  var maxRaw = Math.max(
+    ukvPoints.length  ? ukvPoints[ukvPoints.length - 1][1]   : 0,
+    radarPoints.length ? radarPoints[radarPoints.length - 1][1] : 0
+  );
+  _chartData = { runTs: run.run_ts, runLabel: _shortRunLabel(run.run_ts), runMs: runMs, endMs: endMs, ukvPoints: ukvPoints, radarPoints: radarPoints, maxY: _niceMax(maxRaw) };
+}
+
+function _redrawChart() {
+  if (!_chartData) return;
+  var el = _activePopup && _activePopup.getElement();
+  var svgEl = el && el.querySelector('#popup-chart');
+  if (!svgEl) return;
+  svgEl.innerHTML = _buildChartSVG();
+}
+
+function _buildChartSVG() {
+  var d = _chartData;
+  var W = 364, H = 210;
+  var pL = 40, pR = 8, pT = 20, pB = 46;
+  var plotW = W - pL - pR, plotH = H - pT - pB;  // 316, 144
+
+  function xp(ms) { return pL + (ms - d.runMs) / (d.endMs - d.runMs) * plotW; }
+  function yp(mm) { return pT + plotH - (mm / d.maxY) * plotH; }
+
+  var s = '<rect x="0" y="0" width="' + W + '" height="' + H + '" fill="#f8fafc" rx="4"/>';
+
+  // Header
+  s += '<text x="' + (W/2) + '" y="13" text-anchor="middle" font-size="9" font-weight="600" font-family="Roboto,sans-serif" fill="#475569">1hr cumulative rainfall</text>';
+
+  // Y gridlines and labels
+  var nT = 4;
+  for (var ti = 0; ti <= nT; ti++) {
+    var mm = d.maxY * ti / nT;
+    var y  = yp(mm);
+    s += '<line x1="' + pL + '" y1="' + y + '" x2="' + (pL + plotW) + '" y2="' + y + '" stroke="#e2e8f0" stroke-width="0.5"/>';
+    s += '<text x="' + (pL - 4) + '" y="' + (y + 3.5) + '" text-anchor="end" font-size="8" font-family="Roboto,sans-serif" fill="#94a3b8">' +
+      (mm < 10 ? mm.toFixed(1) : mm.toFixed(0)) + '</text>';
+  }
+
+  // Axes
+  s += '<line x1="' + pL + '" y1="' + pT + '" x2="' + pL + '" y2="' + (pT + plotH) + '" stroke="#cbd5e1" stroke-width="1"/>';
+  s += '<line x1="' + pL + '" y1="' + (pT + plotH) + '" x2="' + (pL + plotW) + '" y2="' + (pT + plotH) + '" stroke="#cbd5e1" stroke-width="1"/>';
+
+  // X ticks, time labels, day labels (shown whenever the day changes)
+  var DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var durationH = (d.endMs - d.runMs) / 3600000;
+  var tickH = durationH <= 54 ? 6 : 12;
+  var prevDay = -1;
+  for (var h = 0; h <= durationH; h += tickH) {
+    var xms = d.runMs + h * 3600000;
+    var x   = xp(xms);
+    var dt  = new Date(xms);
+    s += '<line x1="' + x + '" y1="' + (pT + plotH) + '" x2="' + x + '" y2="' + (pT + plotH + 4) + '" stroke="#cbd5e1" stroke-width="1"/>';
+    s += '<text x="' + x + '" y="' + (pT + plotH + 13) + '" text-anchor="middle" font-size="8" font-family="Roboto,sans-serif" fill="#94a3b8">' +
+      _pad(dt.getUTCHours()) + ':' + _pad(dt.getUTCMinutes()) + '</text>';
+    var curDay = dt.getUTCDay();
+    if (curDay !== prevDay) {
+      s += '<text x="' + x + '" y="' + (pT + plotH + 25) + '" text-anchor="middle" font-size="8" font-family="Roboto,sans-serif" fill="#64748b">' +
+        DAY_NAMES[curDay] + ' ' + dt.getUTCDate() + '</text>';
+      prevDay = curDay;
+    }
+  }
+
+  // Y axis label
+  s += '<text transform="translate(8,' + (pT + plotH / 2) + ') rotate(-90)" text-anchor="middle" font-size="8" font-family="Roboto,sans-serif" fill="#94a3b8">mm</text>';
+
+  // UKV polyline (dashed red)
+  if (d.ukvPoints.length >= 2) {
+    var pts = d.ukvPoints.map(function(p) { return xp(p[0]).toFixed(1) + ',' + yp(p[1]).toFixed(1); }).join(' ');
+    s += '<polyline points="' + pts + '" fill="none" stroke="#e53935" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.9"/>';
+  }
+
+  // Radar polyline (solid blue)
+  if (d.radarPoints.length >= 2) {
+    var rpts = d.radarPoints.map(function(p) { return xp(p[0]).toFixed(1) + ',' + yp(p[1]).toFixed(1); }).join(' ');
+    s += '<polyline points="' + rpts + '" fill="none" stroke="#1565c0" stroke-width="1.5" opacity="0.9"/>';
+  }
+
+  // Current time marker
+  var run = ukvMeta && ukvMeta.runs && ukvMeta.runs[currentRunIdx];
+  if (_lastUKVStep && run) {
+    var runDt = parseRunDt(run.run_ts);
+    if (runDt) {
+      var nowMs = runDt.getTime() + _lastUKVStep.offset_hours * 3600000;
+      var nx = xp(nowMs);
+      if (nx >= pL && nx <= pL + plotW) {
+        s += '<line x1="' + nx.toFixed(1) + '" y1="' + pT + '" x2="' + nx.toFixed(1) + '" y2="' + (pT + plotH) + '" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3" opacity="0.7"/>';
+      }
+    }
+  }
+
+  // Legend (text right-aligns before coloured line, anchored at right edge of plot)
+  var lgX2 = pL + plotW - 4;  // right edge of line: 352
+  var lgX1 = lgX2 - 16;       // left edge of line: 336
+  var lgTX = lgX1 - 4;        // right edge of text: 332
+  var lgY  = pT + 6;
+  s += '<rect x="' + (lgTX - 78) + '" y="' + (lgY - 7) + '" width="' + (lgX2 - lgTX + 82) + '" height="28" fill="rgba(248,250,252,0.88)" rx="2"/>';
+  var ukvLbl = 'UKV' + (d.runLabel ? ' ' + d.runLabel : '');
+  s += '<line x1="' + lgX1 + '" y1="' + lgY + '" x2="' + lgX2 + '" y2="' + lgY + '" stroke="#e53935" stroke-width="1.5" stroke-dasharray="5,3"/>';
+  s += '<text x="' + lgTX + '" y="' + (lgY + 4) + '" text-anchor="end" font-size="8" font-family="Roboto,sans-serif" fill="#e53935">' + ukvLbl + '</text>';
+  lgY += 13;
+  s += '<line x1="' + lgX1 + '" y1="' + lgY + '" x2="' + lgX2 + '" y2="' + lgY + '" stroke="#1565c0" stroke-width="1.5"/>';
+  s += '<text x="' + lgTX + '" y="' + (lgY + 4) + '" text-anchor="end" font-size="8" font-family="Roboto,sans-serif" fill="#1565c0">Radar</text>';
+
+  return s;
+}
+
+function removeAllBoundaryLayers() {
+  Object.keys(MAPS).forEach(function(mid) {
+    Object.keys(layers[mid]).forEach(function(type) {
+      var l = layers[mid][type]; if (l && MAPS[mid].hasLayer(l)) MAPS[mid].removeLayer(l);
+    });
+    labelGroups[mid].clearLayers();
+    if (MAPS[mid].hasLayer(labelGroups[mid])) MAPS[mid].removeLayer(labelGroups[mid]);
+  });
+}
+
+function applyBoundary(type) {
+  removeAllBoundaryLayers();
+  
+  Object.keys(labelGroups).forEach(function(mid) {
+    labelGroups[mid].clearLayers();
+    if (MAPS[mid].hasLayer(labelGroups[mid])) MAPS[mid].removeLayer(labelGroups[mid]);
+  });
+
+  if (type === 'none') return;
+  var data = geojsonData[type];
+  Object.keys(MAPS).forEach(function(mid) {
+    if (!layers[mid][type]) layers[mid][type] = createBoundaryLayer(data, type, mid);
+    layers[mid][type].addTo(MAPS[mid]);
+  });
+  renderAll();
+}
+
+function ensureBoundary(type, cb) {
+  if (geojsonData[type]) { cb(); return; }
+  fetch(R2_CDN + '/geo/' + BOUNDARY_FILES[type]).then(function(r) { if (!r.ok) throw 0; return r.json(); })
+    .catch(function() { return fetch(LOCAL_BASE + BOUNDARY_FILES[type]).then(function(r) { return r.json(); }); })
+    .then(function(data) { geojsonData[type] = data; cb(); })
+    .catch(function(e) { console.error('boundary load failed:', type, e); });
+}
+
+function onBoundaryChange(val) {
+  currentBoundary = val;
+  if (val === 'none') { removeAllBoundaryLayers(); return; }
+  ensureBoundary(val, function() { applyBoundary(val); });
+}
+
+// ── Choropleth rendering ─────────────────────────────────────────
+function renderAll() {
+  var type = currentBoundary;
+  
+  Object.keys(labelGroups).forEach(function(mid) {
+    labelGroups[mid].clearLayers();
+    if (MAPS[mid].hasLayer(labelGroups[mid])) MAPS[mid].removeLayer(labelGroups[mid]);
+  });
+
+  if (type === 'none') return;
+  var nameKey = LAYER_NAME_KEY[type];
+
+  ['radar', 'ukv', 'bias'].forEach(function(mid) {
+    var layer = layers[mid][type];
+    if (!layer) return;
+
+    // In grid mode radar/ukv show raster images; bias always shows choropleth
+    var gridMap = currentViewMode === 'grid' && (mid === 'radar' || mid === 'ukv');
+    var showLabelsForMap = !gridMap && (currentViewMode === 'area' || mid === 'bias');
+    
+    if (showLabelsForMap) {
+      labelGroups[mid].addTo(MAPS[mid]);
+    }
+
+    layer.setStyle(function(f) {
+      if (gridMap || (currentCompareSource === 'gauge' && mid === 'ukv')) {
+        return { fillOpacity: 0, color: '#5f6368', weight: BOUNDARY_STYLES[type].weight };
+      }
+      var name = f.properties[nameKey];
+      var mm, fc;
+      if (mid === 'bias') {
+        var r = currentRadarVals ? currentRadarVals[name] : null;
+        var u = currentUKVVals  ? currentUKVVals[name]   : null;
+        mm = (r != null && u != null) ? (u - r) : null; fc = biasFillColor(mm);
+      } else {
+        var vals = mid === 'radar' ? currentRadarVals : currentUKVVals;
+        mm = vals ? vals[name] : null; fc = mmToFillColor(mm, currentScheme);
+      }
+      return { fillColor: fc || '#ccc', fillOpacity: mm != null ? 0.65 : 0, color: '#5f6368', weight: BOUNDARY_STYLES[type].weight, className: 'region-boundary' };
+    });
+
+    layer.eachLayer(function(l) {
+      var name = l.feature.properties[nameKey];
+      var mm, txt;
+      if (mid === 'bias') {
+        var r = currentRadarVals ? currentRadarVals[name] : null;
+        var u = currentUKVVals  ? currentUKVVals[name]   : null;
+        mm = (r != null && u != null) ? (u - r) : null;
+        txt = name + (mm != null ? ': ' + (mm >= 0 ? '+' : '') + mm.toFixed(1) + ' mm' : '');
+      } else {
+        var vals = mid === 'radar' ? currentRadarVals : currentUKVVals;
+        mm = vals ? vals[name] : null;
+        txt = name + (mm != null ? ': ' + mm.toFixed(1) + ' mm' : '');
+      }
+      l.bindTooltip(txt, { sticky: true, className: 'poly-tooltip' });
+      
+      if (showLabelsForMap && mm !== null && mm !== undefined) {
+        var centroid = l.getBounds().getCenter();
+        var displayVal = (mid === 'bias' && mm >= 0 ? '+' : '') + mm.toFixed(1);
+        var labelMarker = L.marker(centroid, {
+          icon: L.divIcon({
+            className: 'area-value-label',
+            html: displayVal,
+            iconSize: [40, 20],
+            iconAnchor: [20, 10]
+          }),
+          interactive: false
+        });
+        labelGroups[mid].addLayer(labelMarker);
+      }
+    });
+  });
+}
+
+// ── Image overlay management ─────────────────────────────────────
+function updateImageOverlays(snap, ukvStep, ukvPeriodKey) {
+  var radarUrl = null, ukvUrl = null;
+  if (currentViewMode === 'grid' && currentCompareSource === 'radar' && currentPeriod !== 'run') {
+    if (snap && snap[currentPeriod] && snap[currentPeriod][currentScheme])
+      radarUrl = toCDN(snap[currentPeriod][currentScheme]);
+    if (ukvStep && ukvStep[ukvPeriodKey] && ukvStep[ukvPeriodKey][currentScheme])
+      ukvUrl = toCDN(ukvStep[ukvPeriodKey][currentScheme]);
+  }
+
+  if (radarUrl) {
+    if (!radarOverlay) radarOverlay = L.imageOverlay(radarUrl, RADAR_BOUNDS, { opacity: 0.85, interactive: false, pane: 'imgPane' });
+    else radarOverlay.setUrl(radarUrl);
+    if (!radarMap.hasLayer(radarOverlay)) radarOverlay.addTo(radarMap);
+  } else if (radarOverlay && radarMap.hasLayer(radarOverlay)) {
+    radarMap.removeLayer(radarOverlay);
+  }
+
+  if (ukvUrl) {
+    if (!ukvOverlay) ukvOverlay = L.imageOverlay(ukvUrl, UKV_BOUNDS, { opacity: 0.85, interactive: false, pane: 'imgPane' });
+    else ukvOverlay.setUrl(ukvUrl);
+    if (!ukvMap.hasLayer(ukvOverlay)) ukvOverlay.addTo(ukvMap);
+  } else if (ukvOverlay && ukvMap.hasLayer(ukvOverlay)) {
+    ukvMap.removeLayer(ukvOverlay);
+  }
+}
+
+// ── JSON cache ───────────────────────────────────────────────────
+function loadCachedJson(url, cb) {
+  if (polyCache[url]) { cb(polyCache[url]); return; }
+  fetch(url).then(function(r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function(data) { polyCache[url] = data; cb(data); })
+    .catch(function() { cb(null); });
+}
+
+// ── Time parsing ─────────────────────────────────────────────────
+function radarTsToDt(ts) {
+  return new Date(Date.UTC(+ts.slice(0,4), +ts.slice(4,6)-1, +ts.slice(6,8), +ts.slice(8,10), +ts.slice(10,12)));
+}
+function parseRunDt(runTs) {
+  var m = runTs.match(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})Z$/);
+  return m ? new Date(Date.UTC(+m[1], +m[2]-1, +m[3], +m[4], +m[5])) : null;
+}
+function findMatchedUKVStep(run, radarDt) {
+  var targetMs = Math.round(radarDt.getTime() / 3600000) * 3600000;
+  var runDt = parseRunDt(run.run_ts);
+  if (!runDt) return null;
+  for (var i = 0; i < run.steps.length; i++) {
+    if (runDt.getTime() + run.steps[i].offset_hours * 3600000 === targetMs) return run.steps[i];
+  }
+  return null;
+}
+
+// ── Display ──────────────────────────────────────────────────────
+// The live /compare page prints a UTC clock value and stamps it "GMT", which
+// is wrong for the half of the year the UK is on BST — and it disagrees with
+// the run dropdown next to it, whose labels fetch_ukv.py builds in real UK
+// local time. This event sits inside BST, so every reading here would be
+// mislabelled and an hour out from the run it belongs to. Converted the same
+// way fetch_ukv.py's _uk_local() does it: BST from 01:00 UTC on the last
+// Sunday in March to 01:00 UTC on the last Sunday in October.
+function _ukLocal(dtUtc) {
+  var y = dtUtc.getUTCFullYear();
+  function lastSunday(month) {
+    // Day 0 of the following month is the last day of this one.
+    var d = new Date(Date.UTC(y, month + 1, 0, 1, 0));
+    d.setUTCDate(d.getUTCDate() - d.getUTCDay());
+    return d;
+  }
+  if (dtUtc >= lastSunday(2) && dtUtc < lastSunday(9)) {
+    return { dt: new Date(dtUtc.getTime() + 3600000), tz: 'BST' };
+  }
+  return { dt: new Date(dtUtc.getTime()), tz: 'GMT' };
+}
+
+function _writePlayerTime(dtUtc) {
+  var loc = _ukLocal(dtUtc), d = loc.dt;
+  document.getElementById('playerDateLine').textContent =
+    _DAYS[d.getUTCDay()] + ' ' + d.getUTCDate() + ' ' + _MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
+  document.getElementById('playerTimeLine').textContent =
+    _pad(d.getUTCHours()) + ':' + _pad(d.getUTCMinutes()) + ' ' + loc.tz;
+}
+
+function updatePlayerTime(snap) {
+  if (!snap || !snap.ts) {
+    document.getElementById('playerDateLine').textContent = '—';
+    document.getElementById('playerTimeLine').textContent = '—';
+    return;
+  }
+  _writePlayerTime(radarTsToDt(snap.ts));
+}
+
+function updateUKVBadge(step) {
+  var b = document.getElementById('ukvBadge');
+  if (b) b.textContent = step ? 'UKV forecast  T+' + step.offset_hours + 'h' : 'UKV forecast';
+}
+
+var _MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var _DAYS   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function _pad(n) { return n < 10 ? '0'+n : ''+n; }
+
+function updatePlayerTimeFromUKV(step, runDt) {
+  _writePlayerTime(new Date(runDt.getTime() + step.offset_hours * 3600000));
+}
+
+function refreshDisplay() {
+  if (!snapshots.length) return;
+  // Period and run changes reshape validSnapIndices underneath the slider, so
+  // the shaded event span is repositioned on every refresh rather than once.
+  updateEventSpan();
+  var snap    = snapshots[currentIdx];
+
+  var run     = ukvMeta && ukvMeta.runs && ukvMeta.runs[currentRunIdx];
+  var ukvStep = run ? findMatchedUKVStep(run, radarTsToDt(snap.ts)) : null;
+
+  // Show UKV valid time (always on the hour) rather than the radar snapshot timestamp
+  var runDt = run ? parseRunDt(run.run_ts) : null;
+  if (ukvStep && runDt) updatePlayerTimeFromUKV(ukvStep, runDt);
+  else                  updatePlayerTime(snap);
+
+  updatePeriodSelect(ukvStep);                         // may change currentPeriod
+  var ukvPeriodKey = PERIOD_UKV_KEY[currentPeriod];   // recompute after period update
+  updateUKVBadge(ukvStep);
+  updateImageOverlays(snap, ukvStep, ukvPeriodKey);
+
+  if (currentCompareSource === 'gauge') {
+    // Gauge mode: left + bias maps use point markers; UKV middle map still uses poly
+    currentRadarVals = null;
+    clearGaugeMarkers();
+    if (!ukvStep || !ukvStep[ukvPeriodKey]) {
+      currentUKVVals = null; renderAll(); refreshOpenPopup(); return;
+    }
+    var ukvPolyUrl2 = EVENT_BASE + '/ukv_poly/' + run.run_ts + '/' + ukvStep.offset + '.json';
+    loadCachedJson(ukvPolyUrl2, function(ukvPoly) {
+      currentUKVVals = (ukvPoly && ukvPoly[currentBoundary] && ukvPoly[currentBoundary][ukvPeriodKey])
+        ? ukvPoly[currentBoundary][ukvPeriodKey] : null;
+      renderAll(); refreshOpenPopup();
+      var gaugeSnapUrl = EVENT_BASE + '/gauge_bias/' + snap.ts + '.json';
+      var ukvGaugeUrl  = EVENT_BASE + '/ukv_gauge/' + run.run_ts + '/' + ukvStep.offset + '.json';
+      loadCachedJson(gaugeSnapUrl, function(gaugeSnap) {
+        loadCachedJson(ukvGaugeUrl, function(ukvGaugeData) {
+          ensureGaugeStations(function() { renderGaugeMarkers(gaugeSnap, ukvGaugeData); });
+        });
+      });
+    });
+  } else if (currentPeriod === 'run') {
+    loadRunSoFarValues(run, ukvStep, function(radarVals, ukvVals) {
+      currentRadarVals = radarVals;
+      currentUKVVals   = ukvVals;
+      renderAll(); refreshOpenPopup();
+    });
+  } else {
+    // Radar mode: choropleth
+    var radarPolyUrl = EVENT_BASE + '/accum_poly/' + snap.ts + '.json';
+    loadCachedJson(radarPolyUrl, function(radarPoly) {
+      currentRadarVals = (radarPoly && radarPoly[currentBoundary] && radarPoly[currentBoundary][currentPeriod])
+        ? radarPoly[currentBoundary][currentPeriod] : null;
+      if (!ukvStep || !ukvStep[ukvPeriodKey]) {
+        currentUKVVals = null; renderAll(); refreshOpenPopup(); return;
+      }
+      var ukvPolyUrl = EVENT_BASE + '/ukv_poly/' + run.run_ts + '/' + ukvStep.offset + '.json';
+      loadCachedJson(ukvPolyUrl, function(ukvPoly) {
+        currentUKVVals = (ukvPoly && ukvPoly[currentBoundary] && ukvPoly[currentBoundary][ukvPeriodKey])
+          ? ukvPoly[currentBoundary][ukvPeriodKey] : null;
+        renderAll(); refreshOpenPopup();
+      });
+    });
+  }
+}
+
+function loadRunSoFarValues(run, ukvStep, cb) {
+  if (!run || !ukvStep) { cb(null, null); return; }
+  var boundary = currentBoundary;
+  loadCachedJson(EVENT_BASE + '/ukv_area_ts/' + run.run_ts + '.json', function(ukvAreaTs) {
+    var ukvVals = {};
+    if (ukvAreaTs && ukvAreaTs[boundary]) {
+      var stepHours = ukvAreaTs.step_hours || [];
+      var areas = ukvAreaTs[boundary] || {};
+      Object.keys(areas).forEach(function(name) {
+        var vals = areas[name], cum = 0;
+        for (var i = 0; i < stepHours.length && stepHours[i] <= ukvStep.offset_hours; i++) {
+          if (vals[i] != null) cum += vals[i];
+        }
+        ukvVals[name] = Math.round(cum * 10) / 10;
+      });
+    }
+    var pos  = validSnapIndices.indexOf(currentIdx);
+    var idxs = pos >= 0 ? validSnapIndices.slice(0, pos + 1) : [];
+    _loadRadarPolyBatch(idxs, function(radarPolys) {
+      var radarVals = {};
+      idxs.forEach(function(i) {
+        var poly = radarPolys[snapshots[i].ts];
+        if (!poly || !poly[boundary] || !poly[boundary]['1hr']) return;
+        Object.keys(poly[boundary]['1hr']).forEach(function(name) {
+          var v = poly[boundary]['1hr'][name];
+          if (v != null) radarVals[name] = (radarVals[name] || 0) + v;
+        });
+      });
+      Object.keys(radarVals).forEach(function(k) {
+        radarVals[k] = Math.round(radarVals[k] * 10) / 10;
+      });
+      cb(radarVals, ukvVals);
+    });
+  });
+}
+
+// ── Controls ─────────────────────────────────────────────────────
+function setSnapshot(sliderPos) {
+  currentIdx = validSnapIndices.length > sliderPos ? validSnapIndices[sliderPos] : sliderPos;
+  refreshDisplay();
+}
+function setPeriod(p)  { currentPeriod = p; _syncControlState(); computeValidSnapIndices(false, false); refreshDisplay(); }
+function setRun(idx)   { currentRunIdx = idx; computeValidSnapIndices(false, true); refreshDisplay(); }
+function setScheme(s)  { currentScheme = s; buildAccumCbar(); updateImageOverlays(snapshots[currentIdx], _lastUKVStep, PERIOD_UKV_KEY[currentPeriod]); renderAll(); refreshOpenPopup(); }
+
+// Cache the last UKV step so setScheme can update the image without a full refresh
+var _lastUKVStep = null;
+var _origRefresh = refreshDisplay;
+refreshDisplay = function() {
+  if (!snapshots.length) return;
+  var run = ukvMeta && ukvMeta.runs && ukvMeta.runs[currentRunIdx];
+  _lastUKVStep = run ? findMatchedUKVStep(run, radarTsToDt(snapshots[currentIdx].ts)) : null;
+  _origRefresh();
+};
+
+function setViewMode(mode) {
+  currentViewMode = mode;
+  document.getElementById('btnGrid').classList.toggle('seg-active', mode === 'grid');
+  document.getElementById('btnArea').classList.toggle('seg-active', mode === 'area');
+  if (snapshots.length) refreshDisplay();
+}
+
+function updateSourceLabels() {
+  var isGauge = currentCompareSource === 'gauge';
+  var obsLabel  = isGauge ? 'Rain gauges'          : 'Radar obs';
+  var biasLabel = isGauge ? 'Bias (UKV − Gauges)' : 'Bias (UKV − Radar)';
+  document.getElementById('obsHeader').textContent = obsLabel;
+  document.getElementById('biasHeader').innerHTML  = isGauge ? 'Bias (UKV &minus; Gauges)' : 'Bias (UKV &minus; Radar)';
+  var biasCbarP = document.querySelector('#biasCbarOverlay p');
+  if (biasCbarP) biasCbarP.textContent = isGauge ? 'Bias — UKV minus Gauges (mm)' : 'Bias — UKV minus Radar (mm)';
+  var accumCbarP = document.querySelector('#accumCbarRadar p');
+  if (accumCbarP) accumCbarP.textContent = isGauge ? 'Gauges (mm)' : 'Accumulation (mm)';
+  // Mobile (stacked) pane labels are rendered from data-pane-label via CSS — keep them in sync.
+  document.getElementById('accumCbarRadar').setAttribute('data-pane-label', obsLabel);
+  document.getElementById('biasCbarOverlay').setAttribute('data-pane-label', biasLabel);
+}
+
+function _syncControlState() {
+  var isGauge = currentCompareSource === 'gauge';
+  var isRun   = currentPeriod === 'run';
+  document.getElementById('btnGrid').disabled     = isGauge || isRun;
+  document.getElementById('btnArea').disabled     = isGauge;
+  document.getElementById('btnGaugeSrc').disabled = isRun;
+  if ((isGauge || isRun) && currentViewMode === 'grid') {
+    currentViewMode = 'area';
+    document.getElementById('btnGrid').classList.remove('seg-active');
+    document.getElementById('btnArea').classList.add('seg-active');
+  }
+}
+
+function setCompareSource(src) {
+  if (src === 'gauge' && currentPeriod === 'run') {
+    currentPeriod = '3hr';
+    document.getElementById('periodSelect').value = '3hr';
+  }
+  currentCompareSource = src;
+  document.getElementById('btnRadarSrc').classList.toggle('seg-active', src === 'radar');
+  document.getElementById('btnGaugeSrc').classList.toggle('seg-active', src === 'gauge');
+  _syncControlState();
+  if (src === 'radar') clearGaugeMarkers();
+  updateSourceLabels();
+  if (snapshots.length) refreshDisplay();
+}
+
+// ── Gauge point markers ──────────────────────────────────────────
+function clearGaugeMarkers() {
+  if (gaugeMarkerGroup) { radarMap.removeLayer(gaugeMarkerGroup); gaugeMarkerGroup = null; }
+  if (ukvMarkerGroup)   { ukvMap.removeLayer(ukvMarkerGroup);     ukvMarkerGroup   = null; }
+  if (biasMarkerGroup)  { biasMap.removeLayer(biasMarkerGroup);   biasMarkerGroup  = null; }
+}
+
+function ensureGaugeStations(cb) {
+  if (gaugeStations) { cb(); return; }
+  fetch(LOCAL_BASE + 'rain/stations.json')
+    .then(function(r) { return r.json(); })
+    .then(function(d) { gaugeStations = d.stations || {}; cb(); })
+    .catch(function()  { gaugeStations = {}; cb(); });
+}
+
+function renderGaugeMarkers(gaugeSnap, ukvGaugeData) {
+  clearGaugeMarkers();
+  if (!gaugeStations) return;
+
+  var gIdx   = GAUGE_PERIOD_IDX[currentPeriod];
+  var ukvKey = PERIOD_UKV_KEY[currentPeriod];
+
+  gaugeMarkerGroup = L.layerGroup();
+  ukvMarkerGroup   = L.layerGroup();
+  biasMarkerGroup  = L.layerGroup();
+
+  var stationVals = gaugeSnap && gaugeSnap.stations ? gaugeSnap.stations : {};
+
+  Object.keys(gaugeStations).forEach(function(sid) {
+    var st     = gaugeStations[sid];
+    var latlng = [st.lat, st.lon];
+
+    // Gauge accumulation
+    var gVal = null;
+    var raw  = stationVals[sid];
+    if (raw && typeof raw[gIdx] === 'number' && raw[gIdx] >= 0) gVal = raw[gIdx];
+
+    // UKV value at station pixel
+    var uVal = null;
+    if (ukvGaugeData && ukvGaugeData[sid] && ukvGaugeData[sid][ukvKey] != null)
+      uVal = ukvGaugeData[sid][ukvKey];
+
+    // Left map: gauge accumulation dot
+    if (gVal != null) {
+      var gColor = mmToFillColor(gVal, currentScheme) || '#e8eaed';
+      var iconHtml = '<div class="rg-wrap"><div class="rg-icon" style="background:' + gColor + '">' + fmtVal(gVal) + '</div></div>';
+      var gIcon = L.divIcon({
+        className: '',
+        html: iconHtml,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+      });
+      L.marker(latlng, { icon: gIcon, pane: 'overlayPane' })
+        .bindTooltip(st.name + ': ' + gVal.toFixed(1) + ' mm', { sticky: true, className: 'poly-tooltip' })
+        .addTo(gaugeMarkerGroup);
+    }
+
+    // Middle map: UKV forecast value at gauge location
+    if (uVal != null) {
+      var uColor = mmToFillColor(uVal, currentScheme) || '#e8eaed';
+      var iconHtml = '<div class="rg-wrap"><div class="rg-icon" style="background:' + uColor + '">' + fmtVal(uVal) + '</div></div>';
+      var uIcon = L.divIcon({
+        className: '',
+        html: iconHtml,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+      });
+      L.marker(latlng, { icon: uIcon, pane: 'overlayPane' })
+        .bindTooltip(st.name + ' UKV: ' + uVal.toFixed(1) + ' mm', { sticky: true, className: 'poly-tooltip' })
+        .addTo(ukvMarkerGroup);
+    }
+
+    // Right map: bias (UKV − gauge) dot
+    var bias = (gVal != null && uVal != null) ? (uVal - gVal) : null;
+    if (bias != null) {
+      var bColor = biasFillColor(bias) || '#d4d4d4';
+      var iconHtml = '<div class="rg-wrap"><div class="rg-icon" style="background:' + bColor + '">' + fmtVal(bias, true) + '</div></div>';
+      var bIcon = L.divIcon({
+        className: '',
+        html: iconHtml,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+      });
+      L.marker(latlng, { icon: bIcon, pane: 'overlayPane' })
+        .bindTooltip(st.name + ' (' + currentPeriod + '): ' + (bias >= 0 ? '+' : '') + bias.toFixed(1) + ' mm', { sticky: true, className: 'poly-tooltip' })
+        .addTo(biasMarkerGroup);
+    }
+  });
+
+  gaugeMarkerGroup.addTo(radarMap);
+  ukvMarkerGroup.addTo(ukvMap);
+  biasMarkerGroup.addTo(biasMap);
+}
+
+// ── Run select ───────────────────────────────────────────────────
+function buildRunSelect() {
+  var sel = document.getElementById('runSelect');
+  sel.innerHTML = '';
+  if (!ukvMeta || !ukvMeta.runs || !ukvMeta.runs.length) { sel.innerHTML = '<option>No data</option>'; return; }
+  ukvMeta.runs.forEach(function(run, i) {
+    var opt = document.createElement('option'); opt.value = i;
+    opt.textContent = run.run_label || run.run_ts;
+    sel.appendChild(opt);
+  });
+  sel.value = currentRunIdx;
+}
+
+// ── Event manifest ───────────────────────────────────────────────
+// One static file carries both halves of the comparison: `runs` in the same
+// shape as the live ukv_meta.json, `snapshots` in the same shape as
+// accum_multi_meta.json, so everything downstream of here is the live compare
+// page's code unchanged. The event is over, so this is fetched exactly once —
+// there is no polling loop, and nothing on this page changes after load.
+var eventMeta = null;
+
+// Position of the shaded event span on the timeline. Recomputed whenever the
+// set of comparable snapshots changes, since the slider is indexed over
+// validSnapIndices rather than over wall-clock time.
+function updateEventSpan() {
+  var el = document.getElementById('timelineEventSpan');
+  if (!el) return;
+  var startTs = eventMeta && eventMeta.event_start;
+  var endTs   = eventMeta && eventMeta.event_end;
+  if (!startTs || !endTs || validSnapIndices.length < 2) { el.style.display = 'none'; return; }
+
+  var startMs = radarTsToDt(startTs).getTime();
+  var endMs   = radarTsToDt(endTs).getTime();
+  var first = -1, last = -1;
+  validSnapIndices.forEach(function(snapIdx, pos) {
+    var ms = radarTsToDt(snapshots[snapIdx].ts).getTime();
+    if (ms >= startMs && ms <= endMs) {
+      if (first < 0) first = pos;
+      last = pos;
+    }
+  });
+  if (first < 0 || last <= first) { el.style.display = 'none'; return; }
+
+  // Match the track's 9px inset so the span lines up with the slider thumb.
+  var n = validSnapIndices.length - 1;
+  el.style.display = 'block';
+  el.style.left  = 'calc(9px + ' + (first / n * 100) + '% - ' + (first / n * 18) + 'px)';
+  el.style.width = 'calc(' + ((last - first) / n * 100) + '% - ' + ((last - first) / n * 18) + 'px)';
+  el.title = 'Event window: ' + snapshots[validSnapIndices[first]].ts + ' to '
+           + snapshots[validSnapIndices[last]].ts;
+}
+
+// Open on the event rather than at the end of the archive window, which would
+// otherwise show the quiet hours after everything had cleared through.
+function goToFocus() {
+  var focusTs = eventMeta && eventMeta.focus_ts;
+  if (!focusTs || !validSnapIndices.length) return;
+  var focusMs = radarTsToDt(focusTs).getTime();
+  var bestPos = 0, bestDiff = Infinity;
+  validSnapIndices.forEach(function(snapIdx, pos) {
+    var diff = Math.abs(radarTsToDt(snapshots[snapIdx].ts).getTime() - focusMs);
+    if (diff < bestDiff) { bestDiff = diff; bestPos = pos; }
+  });
+  document.getElementById('timeSlider').value = bestPos;
+  currentIdx = validSnapIndices[bestPos];
+}
+
+function applyEventHeader() {
+  if (!eventMeta) return;
+  if (eventMeta.title)    document.getElementById('eventTitle').textContent = eventMeta.title;
+  var sub = document.getElementById('eventSub');
+  var bits = [];
+  if (eventMeta.subtitle) bits.push(eventMeta.subtitle);
+  if (eventMeta.runs && eventMeta.runs.length) {
+    bits.push(eventMeta.runs.length + ' UKV runs');
+  }
+  if (bits.length) sub.textContent = bits.join(' · ');
+  document.title = (eventMeta.title || 'Archived event') + ': UKV vs radar | Flood Forecast';
+}
+
+function loadEventMeta() {
+  fetch(EVENT_BASE + '/meta.json')
+    .then(function(r) { if (!r.ok) throw new Error(r.status); return cdnJson(r); })
+    .then(function(data) {
+      eventMeta = data;
+      applyEventHeader();
+
+      snapshots = data.snapshots || [];
+      ukvMeta   = { runs: data.runs || [] };
+
+      if (!snapshots.length || !ukvMeta.runs.length) {
+        showEventError('This event has no data published yet.');
+        return;
+      }
+
+      // Prefer the event's nominated run over simply the newest one.
+      currentRunIdx = 0;
+      if (data.default_run) {
+        ukvMeta.runs.forEach(function(r, i) {
+          if (r.run_ts === data.default_run) currentRunIdx = i;
+        });
+      }
+      buildRunSelect();
+
+      computeValidSnapIndices(true, true);
+      goToFocus();
+      updateEventSpan();
+      refreshDisplay();
+    })
+    .catch(function(e) {
+      console.error('event meta', e);
+      showEventError('Could not load this event\u2019s archive.');
+    });
+}
+
+function showEventError(msg) {
+  var el = document.getElementById('noCompare');
+  el.textContent = msg + ' The backfill job may not have finished — see '
+                 + 'backfill_compare_event.py.';
+  el.style.display = 'block';
+}
+
+// ── Init ─────────────────────────────────────────────────────────
+buildAccumCbar();
+buildBiasCbar();
+ensureBoundary('catchments', function() { applyBoundary('catchments'); });
+
+loadEventMeta();
+
+function invalidateAllMaps() {
+  [radarMap, ukvMap, biasMap].forEach(function(m) { m.invalidateSize(); });
+}
+window.addEventListener('load', invalidateAllMaps);
+window.addEventListener('resize', invalidateAllMaps);
+window.addEventListener('orientationchange', function() { setTimeout(invalidateAllMaps, 200); });
+</script>
+</body>
+</html>
