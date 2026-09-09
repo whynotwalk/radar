@@ -305,14 +305,18 @@ Three things to keep in mind when changing any of them:
   loading one static `meta.json` instead of the two live manifests (and so no
   polling loop), prefixing the per-frame JSON side-loads with `EVENT_BASE`,
   `../` on repo-root assets since it sits one directory down, an identity strip
-  plus a shaded event span on the timeline, and **a timezone fix**.
-- **Known bug still live in `compare.html`:** both `updatePlayerTime()` and
-  `updatePlayerTimeFromUKV()` print a UTC clock value and hardcode the suffix
-  `GMT`, which is wrong for the whole BST half of the year — and it silently
-  contradicts the UKV run dropdown beside it, whose labels `fetch_ukv.py` builds
-  in real UK local time via `_uk_local()`. The event page carries a `_ukLocal()`
-  port of that helper and is correct; `/compare` has **not** been changed. Worth
-  fixing there too, but that is a live-page change, not this feature's.
+  plus a shaded event span on the timeline, and **times in GMT throughout**.
+- **Event pages are GMT/UTC end to end — do not "fix" this to local time.**
+  The timeline readout, the run dropdown, the per-step `valid_label`, the radar
+  snapshot timestamps and the popup chart axis are all UTC stamped `GMT`. That
+  is the convention UK meteorology works in and what makes an archive readable
+  as a record. It takes a deliberate departure from the live pipeline: the run
+  and step labels in the manifest come from `event_run_label()` in
+  `backfill_compare_event.py`, **not** `fetch_ukv.run_label_str()` /
+  `valid_label_str()`, which localise to UK time via `_uk_local()` and would
+  print an event inside BST an hour ahead of every raw timestamp beside it. If
+  a future event page shows a run dropdown an hour out from its slider, this is
+  why: something has been routed back through the live label helpers.
 
 ## FGS tracker (`fetch_fgs.py` / `fgscomparison/index.html`)
 

@@ -133,6 +133,23 @@ def radar_snapshot_ts(event):
     return out
 
 
+# ── Time labels ───────────────────────────────────────────────────────────────
+# The live pipeline labels runs and steps in UK local time via
+# fetch_ukv.run_label_str() / valid_label_str(), which is right for a page about
+# what is happening now. An event archive is read as a record, so every label
+# here is UTC stamped "GMT" — the convention UK meteorology works in, and the
+# same basis as the radar snapshot timestamps, the popup chart axis and the
+# timeline readout. Mixing the two would put the run dropdown an hour out from
+# the slider beside it for any event inside BST, which this one is.
+def event_run_label(run_ts):
+    dt = fu.parse_run_dt(run_ts)
+    return f"{dt.day} " + dt.strftime("%b %Y %H:%M") + " GMT"
+
+
+def event_valid_label(valid_ts):
+    return event_run_label(valid_ts)
+
+
 def _force_rerun():
     """Same truthiness rule fetch_ukv.py uses, so a literal "false" from a
     workflow input is not read as a request to re-render everything."""
@@ -209,7 +226,7 @@ def process_ukv_run(s3, r2, event_id, run_ts, mapping, masks, station_pixels):
     accum_stack    = []
 
     for i, (hours, offset, valid_ts) in enumerate(steps):
-        vlabel = fu.valid_label_str(valid_ts)
+        vlabel = event_valid_label(valid_ts)
         print(f"    [{i+1}/{len(steps)}] {offset}  {vlabel}", flush=True)
 
         entry = {"offset": offset, "offset_hours": hours, "valid_label": vlabel}
@@ -345,7 +362,7 @@ def process_ukv_run(s3, r2, event_id, run_ts, mapping, masks, station_pixels):
 
     return {
         "run_ts":         run_ts,
-        "run_label":      fu.run_label_str(run_ts),
+        "run_label":      event_run_label(run_ts),
         "forecast_hours": steps[-1][0],
         "steps":          step_entries,
     }

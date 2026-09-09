@@ -1258,33 +1258,20 @@ function findMatchedUKVStep(run, radarDt) {
 }
 
 // ── Display ──────────────────────────────────────────────────────
-// The live /compare page prints a UTC clock value and stamps it "GMT", which
-// is wrong for the half of the year the UK is on BST — and it disagrees with
-// the run dropdown next to it, whose labels fetch_ukv.py builds in real UK
-// local time. This event sits inside BST, so every reading here would be
-// mislabelled and an hour out from the run it belongs to. Converted the same
-// way fetch_ukv.py's _uk_local() does it: BST from 01:00 UTC on the last
-// Sunday in March to 01:00 UTC on the last Sunday in October.
-function _ukLocal(dtUtc) {
-  var y = dtUtc.getUTCFullYear();
-  function lastSunday(month) {
-    // Day 0 of the following month is the last day of this one.
-    var d = new Date(Date.UTC(y, month + 1, 0, 1, 0));
-    d.setUTCDate(d.getUTCDate() - d.getUTCDay());
-    return d;
-  }
-  if (dtUtc >= lastSunday(2) && dtUtc < lastSunday(9)) {
-    return { dt: new Date(dtUtc.getTime() + 3600000), tz: 'BST' };
-  }
-  return { dt: new Date(dtUtc.getTime()), tz: 'GMT' };
-}
-
+// Every time on this page is UTC, labelled GMT — the convention UK
+// meteorology works in, and what the run dropdown and step labels in the event
+// manifest are built in too (see event_run_label() in
+// backfill_compare_event.py). Deliberately *not* converted to UK local time:
+// this event sits in BST, so a local-time page would print 22:00 for a 21:00Z
+// radar frame and disagree with every other timestamp in the archive. Both
+// display paths go through one helper so the slider and the run selector can
+// never drift apart.
 function _writePlayerTime(dtUtc) {
-  var loc = _ukLocal(dtUtc), d = loc.dt;
   document.getElementById('playerDateLine').textContent =
-    _DAYS[d.getUTCDay()] + ' ' + d.getUTCDate() + ' ' + _MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear();
+    _DAYS[dtUtc.getUTCDay()] + ' ' + dtUtc.getUTCDate() + ' ' +
+    _MONTHS[dtUtc.getUTCMonth()] + ' ' + dtUtc.getUTCFullYear();
   document.getElementById('playerTimeLine').textContent =
-    _pad(d.getUTCHours()) + ':' + _pad(d.getUTCMinutes()) + ' ' + loc.tz;
+    _pad(dtUtc.getUTCHours()) + ':' + _pad(dtUtc.getUTCMinutes()) + ' GMT';
 }
 
 function updatePlayerTime(snap) {
