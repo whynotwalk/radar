@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-12T12:59:02Z",
-  "latest_time": "2026-09-12T12:45:00",
+  "generated_at": "2026-09-12T13:09:03Z",
+  "latest_time": "2026-09-12T13:00:00",
   "available_days": [
     "20260829",
     "20260830",
@@ -18,6 +18,6 @@
     "20260911",
     "20260912"
   ],
-  "last_backfill_at": "2026-09-12T12:09:08Z",
+  "last_backfill_at": "2026-09-12T13:09:03Z",
   "r2_base_url": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev"
 }
