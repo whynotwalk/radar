@@ -1,59 +1,6 @@
 {
-  "generated_at": "2026-09-12T16:04:00.000Z",
+  "generated_at": "2026-09-12T16:19:00.000Z",
   "snapshots": [
-    {
-      "ts": "202609101600",
-      "time": "Thu 10 Sep 2026 16:00 UTC",
-      "1hr": {
-        "period_start": "Thu 10 Sep 2026 15:00 UTC",
-        "period_end": "Thu 10 Sep 2026 16:00 UTC",
-        "norm": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_1hr_norm.png",
-        "high": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_1hr_high.png",
-        "met": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_1hr_met.png"
-      },
-      "3hr": {
-        "period_start": "Thu 10 Sep 2026 13:00 UTC",
-        "period_end": "Thu 10 Sep 2026 16:00 UTC",
-        "norm": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_3hr_norm.png",
-        "high": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_3hr_high.png",
-        "met": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_3hr_met.png"
-      },
-      "6hr": {
-        "period_start": "Thu 10 Sep 2026 10:00 UTC",
-        "period_end": "Thu 10 Sep 2026 16:00 UTC",
-        "norm": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_6hr_norm.png",
-        "high": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_6hr_high.png",
-        "met": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_6hr_met.png"
-      },
-      "12hr": {
-        "period_start": "Thu 10 Sep 2026 04:00 UTC",
-        "period_end": "Thu 10 Sep 2026 16:00 UTC",
-        "norm": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_12hr_norm.png",
-        "high": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_12hr_high.png",
-        "met": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_12hr_met.png"
-      },
-      "24hr": {
-        "period_start": "Wed 09 Sep 2026 16:00 UTC",
-        "period_end": "Thu 10 Sep 2026 16:00 UTC",
-        "norm": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_24hr_norm.png",
-        "high": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_24hr_high.png",
-        "met": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_24hr_met.png"
-      },
-      "48hr": {
-        "period_start": "Tue 08 Sep 2026 16:00 UTC",
-        "period_end": "Thu 10 Sep 2026 16:00 UTC",
-        "norm": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_48hr_norm.png",
-        "high": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_48hr_high.png",
-        "met": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_48hr_met.png"
-      },
-      "5d": {
-        "period_start": "Sat 05 Sep 2026 16:00 UTC",
-        "period_end": "Thu 10 Sep 2026 16:00 UTC",
-        "norm": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_5d_norm.png",
-        "high": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_5d_high.png",
-        "met": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609101600_5d_met.png"
-      }
-    },
     {
       "ts": "202609101615",
       "time": "Thu 10 Sep 2026 16:15 UTC",
@@ -10175,6 +10122,59 @@
         "norm": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121545_5d_norm.png",
         "high": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121545_5d_high.png",
         "met": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121545_5d_met.png"
+      }
+    },
+    {
+      "ts": "202609121600",
+      "time": "Sat 12 Sep 2026 16:00 UTC",
+      "1hr": {
+        "period_start": "Sat 12 Sep 2026 15:00 UTC",
+        "period_end": "Sat 12 Sep 2026 16:00 UTC",
+        "norm": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_1hr_norm.png",
+        "high": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_1hr_high.png",
+        "met": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_1hr_met.png"
+      },
+      "3hr": {
+        "period_start": "Sat 12 Sep 2026 13:00 UTC",
+        "period_end": "Sat 12 Sep 2026 16:00 UTC",
+        "norm": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_3hr_norm.png",
+        "high": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_3hr_high.png",
+        "met": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_3hr_met.png"
+      },
+      "6hr": {
+        "period_start": "Sat 12 Sep 2026 10:00 UTC",
+        "period_end": "Sat 12 Sep 2026 16:00 UTC",
+        "norm": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_6hr_norm.png",
+        "high": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_6hr_high.png",
+        "met": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_6hr_met.png"
+      },
+      "12hr": {
+        "period_start": "Sat 12 Sep 2026 04:00 UTC",
+        "period_end": "Sat 12 Sep 2026 16:00 UTC",
+        "norm": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_12hr_norm.png",
+        "high": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_12hr_high.png",
+        "met": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_12hr_met.png"
+      },
+      "24hr": {
+        "period_start": "Fri 11 Sep 2026 16:00 UTC",
+        "period_end": "Sat 12 Sep 2026 16:00 UTC",
+        "norm": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_24hr_norm.png",
+        "high": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_24hr_high.png",
+        "met": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_24hr_met.png"
+      },
+      "48hr": {
+        "period_start": "Thu 10 Sep 2026 16:00 UTC",
+        "period_end": "Sat 12 Sep 2026 16:00 UTC",
+        "norm": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_48hr_norm.png",
+        "high": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_48hr_high.png",
+        "met": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_48hr_met.png"
+      },
+      "5d": {
+        "period_start": "Mon 07 Sep 2026 16:00 UTC",
+        "period_end": "Sat 12 Sep 2026 16:00 UTC",
+        "norm": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_5d_norm.png",
+        "high": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_5d_high.png",
+        "met": "https://pub-96089466ef9841fb90f34b6f89f0a090.r2.dev/accum_hist/202609121600_5d_met.png"
       }
     }
   ]
